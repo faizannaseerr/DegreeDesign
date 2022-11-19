@@ -2,9 +2,11 @@ package com.example.coursemanager.ui.login;
 
 import android.app.Activity;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.coursemanager.MainActivity;
 import com.example.coursemanager.R;
 import com.example.coursemanager.ui.login.LoginViewModel;
 import com.example.coursemanager.ui.login.LoginViewModelFactory;
@@ -120,8 +123,18 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+
+
+                // Adds functionality to the "Login or Sign Up" button to open a new "MainActivity"
+                // We probably want to add a check here to see if an admin is logging in and if one is we can
+                // create different "AdminActivity" to open in such case. Otherwise MainActivity can be
+                // opened if a student is logging in/signing up. First fragment in MainActivity can be
+                // a menu for students to view courses, create schedule, view schedule, etc.
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
+
+        ;
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
