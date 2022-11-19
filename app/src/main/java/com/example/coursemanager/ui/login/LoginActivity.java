@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
+        final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -69,6 +70,14 @@ public class LoginActivity extends AppCompatActivity {
                     DrawableCompat.setTint(buttonDrawable, Color.rgb(243, 204, 85));
                     loginButton.setBackground(buttonDrawable);
                     loginButton.setTextColor(Color.rgb(0, 0, 0));
+                }
+                registerButton.setEnabled(loginFormState.isDataValid());
+                if (registerButton.isEnabled()) {
+                    Drawable buttonDrawable = registerButton.getBackground();
+                    buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+                    DrawableCompat.setTint(buttonDrawable, Color.rgb(243, 204, 85));
+                    registerButton.setBackground(buttonDrawable);
+                    registerButton.setTextColor(Color.rgb(0, 0, 0));
                 }
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
@@ -147,7 +156,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        ;
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+
+
+                //I've gone ahead and added a register button, since we'll most likely be separating
+                //the buttons anyways.
+                //This button will write to the database, while the other will read from it.
+                //It still says login for now, but we plan on changing that.
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
