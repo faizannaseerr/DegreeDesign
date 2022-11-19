@@ -2,11 +2,17 @@ package com.example.coursemanager.ui.login;
 
 import android.app.Activity;
 
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -57,6 +63,13 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                if (loginButton.isEnabled()) {
+                    Drawable buttonDrawable = loginButton.getBackground();
+                    buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+                    DrawableCompat.setTint(buttonDrawable, Color.rgb(243, 204, 85));
+                    loginButton.setBackground(buttonDrawable);
+                    loginButton.setTextColor(Color.rgb(0, 0, 0));
+                }
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
