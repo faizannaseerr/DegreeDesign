@@ -9,6 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="landing_background1">#C3FD1A05</color>
     <color name="landing_background2">#E1EC6906</color>
-    <color name="signin_button">#7BEA68</color>
+    <color name="default_button_colour">#F3CC55</color>
     <color name="toolbar_color">#E85709</color>
 </resources>
