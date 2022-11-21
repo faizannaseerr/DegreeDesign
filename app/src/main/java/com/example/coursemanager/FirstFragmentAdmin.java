@@ -42,6 +42,7 @@ public class FirstFragmentAdmin extends Fragment {
         binding.adminBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getActivity().finish();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
             }

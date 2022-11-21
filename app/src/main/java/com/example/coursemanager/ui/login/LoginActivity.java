@@ -175,12 +175,14 @@ public class LoginActivity extends AppCompatActivity {
                                     else {
                                         DataSnapshot ds = task.getResult();
                                         User login = ds.getValue(User.class);
-                                        if(user.password.compareTo(login.getPaswword()) == 0){
+                                        if(user.password.compareTo(login.getPassword()) == 0){
 
                                             // Checks if the password entered matches the password of the given email.
                                             // If it does, bring them to the student landing page
 
+                                            finish();
                                             startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+
                                         }
                                         else{
 
@@ -217,11 +219,12 @@ public class LoginActivity extends AppCompatActivity {
                                     else {
                                         DataSnapshot ds = task.getResult();
                                         User login = ds.getValue(User.class);
-                                        if(user.password.compareTo(login.getPaswword()) == 0){
+                                        if(user.password.compareTo(login.getPassword()) == 0){
 
                                             // Checks if the password entered matches the password of the given email.
                                             // If it does, bring them to the student landing page
 
+                                            finish();
                                             startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
                                         }
                                         else{

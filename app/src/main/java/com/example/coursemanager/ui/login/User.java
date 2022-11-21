@@ -24,7 +24,7 @@ public class User {
         return this.email;
     }
 
-    public String getPaswword(){
+    public String getPassword(){
         return this.password;
     }
 
