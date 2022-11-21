@@ -1,5 +1,6 @@
 package com.example.coursemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.coursemanager.databinding.FragmentFirstBinding;
+import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
+import com.example.coursemanager.ui.login.LoginActivity;
 
-public class FirstFragment extends Fragment {
+public class FirstFragmentStudent extends Fragment {
 
-    private FragmentFirstBinding binding;
+    private FragmentFirstStudentBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +23,7 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -32,8 +34,16 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
+                NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
+
+        binding.studentBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
