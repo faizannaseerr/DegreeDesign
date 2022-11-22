@@ -61,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = binding.login;
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
-        final int[] buttonAction = new int[1];
+        final int[] loginAction = new int[1];
+        final int[] registerAction = new int[1];
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -108,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     updateUiWithUser(loginResult.getSuccess());
                 }
                 setResult(Activity.RESULT_OK);
+
             }
         });
 
@@ -119,7 +121,94 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
+
+                // All the below code checks the database and if all the information of the user matches
+                // completely with a user from the database
+                User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
+
+                // Check if the user information entered is a student login in the database
+                ref.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (usernameEditText.getText().toString().compareTo("") == 0) {
+                            //does nothing but prevents app from crashing
+                        }
+                        //if the email is correct, continue with the checks, otherwise, display msg
+                        else if (snapshot.hasChild(usernameEditText.getText().toString())) {
+                            ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                                    DataSnapshot ds = task.getResult();
+                                    User login = ds.getValue(User.class);
+                                    if(user.password.compareTo(login.getPassword()) == 0){
+                                        // Checks if the password entered matches the password of the given email.
+                                        // If it does, bring them to the student landing page
+                                        loginAction[0] = 3;
+                                        registerAction[0] = 1;
+
+                                    }
+                                    else{
+                                        //wrong password msg
+                                        loginAction[0] = 2;
+                                        registerAction[0] = 1;
+
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            loginAction[0] = 1;
+                            registerAction[0] = 2;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                // Check if the user information entered is an admin login in the database
+                ref.child("admins").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (usernameEditText.getText().toString().compareTo("") == 0) {
+                            //does nothing but prevents app from crashing
+                        }
+                        //if the email is correct, continue with the checks, otherwise, display msg
+                        else if (snapshot.hasChild(usernameEditText.getText().toString())) {
+                            ref.child("admins").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                                    DataSnapshot ds = task.getResult();
+                                    User login = ds.getValue(User.class);
+                                    if(user.password.compareTo(login.getPassword()) == 0){
+
+                                        // Checks if the password entered matches the password of the given email.
+                                        // If it does, bring them to the admin landing page
+                                        loginAction[0] = 4;
+                                    }
+                                    else {
+                                        //wrong password msg
+                                        loginAction[0] = 2;
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            loginAction[0] = 1;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -150,93 +239,23 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
+                if (loginAction[0] == 1) {
+                    String warningMsg = "This Email is not associated \nwith an account";
+                    Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
+                }
+                else if (loginAction[0] == 2) {
+                    String warningMsg = "The password entered is incorrect";
+                    Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
+                }
+                else if (loginAction[0] == 3) {
+                    finish();
+                    startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+                }
+                else if (loginAction[0] ==4 ) {
+                    finish();
+                    startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
+                }
 
-                // All the below code checks the database and if all the information of the user matches
-                // completely with a user from the database
-
-                User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
-
-                // Check if the user information entered is a student login in the database
-                ref.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        if (snapshot.hasChild(usernameEditText.getText().toString())) {
-                            ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                                    DataSnapshot ds = task.getResult();
-                                    User login = ds.getValue(User.class);
-                                    if(user.password.compareTo(login.getPassword()) == 0){
-
-                                        // Checks if the password entered matches the password of the given email.
-                                        // If it does, bring them to the student landing page
-
-                                        finish();
-                                        startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
-
-                                    }
-                                    else{
-                                        buttonAction[0] = 2;
-
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            buttonAction[0] = 1;
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
-                // Check if the user information entered is an admin login in the database
-                ref.child("admins").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        if (snapshot.hasChild(usernameEditText.getText().toString())) {
-                            ref.child("admins").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-
-                                        // Need to add some functionality to tell the user their email does not
-                                        // exist in the database
-
-                                    }
-                                    else {
-                                        DataSnapshot ds = task.getResult();
-                                        User login = ds.getValue(User.class);
-                                        if(user.password.compareTo(login.getPassword()) == 0){
-
-                                            // Checks if the password entered matches the password of the given email.
-                                            // If it does, bring them to the student landing page
-
-                                            finish();
-                                            startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
-                                        }
-                                        else{
-
-                                            // Need to add some functionality to tell the user their password is wrong
-
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
 
 
             }
@@ -249,52 +268,18 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
-                User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
-
-                if (buttonAction[0] == 1) {
-                    String warningMsg = "This Email is already registered with an account";
+                //email error
+                if (registerAction[0] == 1) {
+                    String warningMsg = "This Email is already \nassociated with an account";
                     Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
                 }
-                // Check if the user information entered is a student login in the database
-                ref.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        if (snapshot.hasChild(usernameEditText.getText().toString())) {
-                            ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (task.isSuccessful()) {
-
-                                    }
-                                    else {
-                                        DataSnapshot ds = task.getResult();
-                                        User login = ds.getValue(User.class);
-                                        if (user.password.compareTo(login.getPassword()) == 0) {
-
-                                            // Checks if the password entered matches the password of the given email.
-                                            // If it does, bring them to the student landing page
-
-                                            finish();
-                                            startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
-
-                                        }
-                                    else {
-
-                                            // Need to add some functionality to tell the user their password is wrong
-
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                //new acc
+                else if (registerAction[0] == 2) {
+                    User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                    DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
+                    ref.child("students").child(usernameEditText.getText().toString()).setValue(user);
+                    startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+                }
             }
         });
     }
