@@ -34,6 +34,7 @@ import com.example.coursemanager.R;
 import com.example.coursemanager.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = binding.login;
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
+        final int[] buttonAction = new int[1];
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -106,9 +108,6 @@ public class LoginActivity extends AppCompatActivity {
                     updateUiWithUser(loginResult.getSuccess());
                 }
                 setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
             }
         });
 
@@ -144,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
@@ -155,7 +155,6 @@ public class LoginActivity extends AppCompatActivity {
                 // completely with a user from the database
 
                 User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
-
                 DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
 
                 // Check if the user information entered is a student login in the database
@@ -166,32 +165,27 @@ public class LoginActivity extends AppCompatActivity {
                             ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (!task.isSuccessful()) {
 
-                                        // Need to add some functionality to tell the user their email does not
-                                        // exist in the database
+                                    DataSnapshot ds = task.getResult();
+                                    User login = ds.getValue(User.class);
+                                    if(user.password.compareTo(login.getPassword()) == 0){
+
+                                        // Checks if the password entered matches the password of the given email.
+                                        // If it does, bring them to the student landing page
+
+                                        finish();
+                                        startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
 
                                     }
-                                    else {
-                                        DataSnapshot ds = task.getResult();
-                                        User login = ds.getValue(User.class);
-                                        if(user.password.compareTo(login.getPassword()) == 0){
+                                    else{
+                                        buttonAction[0] = 2;
 
-                                            // Checks if the password entered matches the password of the given email.
-                                            // If it does, bring them to the student landing page
-
-                                            finish();
-                                            startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
-
-                                        }
-                                        else{
-
-                                            // Need to add some functionality to tell the user their password is wrong
-
-                                        }
                                     }
                                 }
                             });
+                        }
+                        else {
+                            buttonAction[0] = 1;
                         }
                     }
 
@@ -244,13 +238,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-//                OLD!!!!!! DISREGARD
-////                 Adds functionality to the "Login or Sign Up" button to open a new "MainActivity"
-////                 We probably want to add a check here to see if an admin is logging in and if one is we can
-////                 create different "AdminActivity" to open in such case. Otherwise MainActivity can be
-////                 opened if a student is logging in/signing up. First fragment in MainActivity can be
-////                 a menu for students to view courses, create schedule, view schedule, etc.
-////                startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+
             }
         });
 
@@ -261,20 +249,57 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
+                User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
 
-                //I've gone ahead and added a register button, since we'll most likely be separating
-                //the buttons anyways.
-                //This button will write to the database, while the other will read from it.
-                //It still says login for now, but we plan on changing that.
-                startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
+                if (buttonAction[0] == 1) {
+                    String warningMsg = "This Email is already registered with an account";
+                    Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
+                }
+                // Check if the user information entered is a student login in the database
+                ref.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.hasChild(usernameEditText.getText().toString())) {
+                            ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()) {
+
+                                    }
+                                    else {
+                                        DataSnapshot ds = task.getResult();
+                                        User login = ds.getValue(User.class);
+                                        if (user.password.compareTo(login.getPassword()) == 0) {
+
+                                            // Checks if the password entered matches the password of the given email.
+                                            // If it does, bring them to the student landing page
+
+                                            finish();
+                                            startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+
+                                        }
+                                    else {
+
+                                            // Need to add some functionality to tell the user their password is wrong
+
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
