@@ -232,7 +232,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
@@ -240,7 +239,7 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
 
                 if (loginAction[0] == 1) {
-                    String warningMsg = "This Email is not associated \nwith an account";
+                    String warningMsg = "This username is not associated \nwith an account";
                     Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
                 }
                 else if (loginAction[0] == 2) {
@@ -270,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //email error
                 if (registerAction[0] == 1) {
-                    String warningMsg = "This Email is already \nassociated with an account";
+                    String warningMsg = "This username is already \nassociated with an account";
                     Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
                 }
                 //new acc
