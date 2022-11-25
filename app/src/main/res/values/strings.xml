@@ -24,4 +24,13 @@
     <string name="first_fragment_admin">Admin Landing Page</string>
     <string name="hello_second_fragment_admin">Hello second fragment. Arg: %1$s</string>
     <string name="back_button_text">Back</string>
+
+    <string name="add_course">Add Course</string>
+    <string name="course_code">Course Code</string>
+    <string name="offering_sessions">Offering Sessions</string>
+    <string name="fall">Fall</string>
+    <string name="winter">Winter</string>
+    <string name="summer">Summer</string>
+    <string name="create_course">Create</string>
+
 </resources>

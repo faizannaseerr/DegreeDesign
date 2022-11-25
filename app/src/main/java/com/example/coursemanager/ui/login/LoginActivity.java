@@ -134,6 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (usernameEditText.getText().toString().compareTo("") == 0) {
                             //does nothing but prevents app from crashing
                         }
+                        if (usernameEditText.getText().toString().compareTo(".") == 0) {
+                            int length = usernameEditText.getText().toString().length();
+
+                        }
                         //if the email is correct, continue with the checks, otherwise, display msg
                         else if (snapshot.hasChild(usernameEditText.getText().toString())) {
                             ref.child("students").child(usernameEditText.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
