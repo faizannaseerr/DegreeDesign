@@ -23,7 +23,8 @@
     <string name="title_activity_main_admin">MainActivityAdmin</string>
     <string name="first_fragment_admin">Admin Landing Page</string>
     <string name="hello_second_fragment_admin">Hello second fragment. Arg: %1$s</string>
-    <string name="back_button_text">Back</string>
+    <string name="back_button_text">Logout</string>
+    <string name="courses_taken_name">Courses Taken</string>
 
     <string name="add_course">Add Course</string>
     <string name="course_code">Course Code</string>
