@@ -248,7 +248,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else if (loginAction[0] == 3) {
                     finish();
-                    startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+                    //Setting up passing username to next screen
+                    Intent passer = new Intent(LoginActivity.this, MainActivityStudent.class);
+                    passer.putExtra("username", usernameEditText.getText().toString());
+                    startActivity(passer);
                 }
                 else if (loginAction[0] ==4 ) {
                     finish();

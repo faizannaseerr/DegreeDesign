@@ -48,4 +48,13 @@ public class MainActivityStudent extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    public String getUsername() {
+        String name = "";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            name = bundle.getString("username");
+        }
+        return name;
+    }
 }
