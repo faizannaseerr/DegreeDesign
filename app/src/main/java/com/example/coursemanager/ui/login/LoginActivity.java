@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -30,11 +29,9 @@ import android.widget.Toast;
 
 import com.example.coursemanager.MainActivityAdmin;
 import com.example.coursemanager.MainActivityStudent;
-import com.example.coursemanager.R;
 import com.example.coursemanager.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -236,7 +233,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
@@ -244,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
 
                 if (loginAction[0] == 1) {
-                    String warningMsg = "This Email is not associated \nwith an account";
+                    String warningMsg = "This username is not associated \nwith an account";
                     Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
                 }
                 else if (loginAction[0] == 2) {
@@ -253,7 +249,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else if (loginAction[0] == 3) {
                     finish();
-                    startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+                    //Setting up passing username to next screen
+                    Intent passer = new Intent(LoginActivity.this, MainActivityStudent.class);
+                    passer.putExtra("username", usernameEditText.getText().toString());
+                    startActivity(passer);
                 }
                 else if (loginAction[0] ==4 ) {
                     finish();
@@ -274,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //email error
                 if (registerAction[0] == 1) {
-                    String warningMsg = "This Email is already \nassociated with an account";
+                    String warningMsg = "This username is already \nassociated with an account";
                     Toast.makeText(getApplicationContext(), warningMsg, Toast.LENGTH_LONG).show();
                 }
                 //new acc

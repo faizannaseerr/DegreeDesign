@@ -24,6 +24,9 @@ public class FirstFragmentStudent extends Fragment {
     ) {
 
         binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
+        MainActivityStudent activity = (MainActivityStudent) getActivity();
+        String username = activity.getUsername();
+        binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
         return binding.getRoot();
 
     }
