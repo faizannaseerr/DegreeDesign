@@ -16,9 +16,10 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="cancel">Cancel</string>
 
     <string name="hello_first_fragment_student">Student Landing Page</string>
-    <string name="hello_second_fragment_student">Hello second fragment. Arg: %1$s</string>
+    <string name="hello_second_fragment_student">Add Courses</string>
     <string name="action_register">Register</string>
     <string name="title_activity_main_admin">MainActivityAdmin</string>
     <string name="first_fragment_admin">Admin Landing Page</string>
