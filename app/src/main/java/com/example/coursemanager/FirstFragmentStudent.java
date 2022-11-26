@@ -22,9 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FirstFragmentStudent extends Fragment {
 
     private FragmentFirstStudentBinding binding;
@@ -38,7 +35,8 @@ public class FirstFragmentStudent extends Fragment {
         binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
         MainActivityStudent activity = (MainActivityStudent) getActivity();
         binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
-        takenCoursesTable();
+        takenCoursesTable(binding.takenTable, "Courses Taken");
+        takenCoursesTable(binding.wantedTable,"Courses Wanted");
         return binding.getRoot();
 
     }
@@ -70,13 +68,12 @@ public class FirstFragmentStudent extends Fragment {
         binding = null;
     }
 
-    protected void takenCoursesTable(){
+    protected void takenCoursesTable(TableLayout table, String child_name){
         DatabaseReference ref = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
                 .getReference().child("students")
                 .child(((MainActivityStudent) getActivity()).getUsername())
-                .child("Courses Taken");
-        TableLayout table = binding.takenTable;
+                .child(child_name);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
