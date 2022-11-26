@@ -17,8 +17,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
 import com.example.coursemanager.ui.login.LoginActivity;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstFragmentStudent extends Fragment {
 
@@ -32,7 +37,6 @@ public class FirstFragmentStudent extends Fragment {
 
         binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
         MainActivityStudent activity = (MainActivityStudent) getActivity();
-        String username = activity.getUsername();
         binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
         takenCoursesTable();
         return binding.getRoot();
@@ -69,25 +73,36 @@ public class FirstFragmentStudent extends Fragment {
     protected void takenCoursesTable(){
         DatabaseReference ref = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                .getReference();
-        DataSnapshot snapshot;
+                .getReference().child("students")
+                .child(((MainActivityStudent) getActivity()).getUsername())
+                .child("Courses Taken");
         TableLayout table = binding.takenTable;
-        for (int i = 0; i < 3; i ++) {
-            TableRow row = new TableRow(getActivity());
-            TableRow.LayoutParams params =
-                    new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-            row.setLayoutParams(params);
-            row.setId(1000+i);
-            TextView course = new TextView(getActivity());
-            course.setId(2000+i);
-            row.addView(course);
-            Button edit = new Button(getActivity());
-            edit.setId(3000+i);
-            row.addView(edit);
-            course.setText("Hello" + i);
-            edit.setText("Edit");
-            table.addView(row, i);
-        }
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int i = 0;
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    TableRow row = new TableRow(getActivity());
+                    TableRow.LayoutParams params =
+                            new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+                    row.setLayoutParams(params);
+                    row.setId(1000+i);
+                    TextView course = new TextView(getActivity());
+                    course.setId(2000+i);
+                    row.addView(course);
+                    Button edit = new Button(getActivity());
+                    edit.setId(3000+i);
+                    row.addView(edit);
+                    course.setText(datasnapshot.getKey());
+                    edit.setText("Delete");
+                    table.addView(row, i);
+                    i++;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
 }
