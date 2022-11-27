@@ -120,13 +120,19 @@ public class SecondFragmentAdmin extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
-                            course.addPrereqs(s.toString());
+                            if(course.getPrereqs().contains(s)){
+                                String warningMsg = "This course is already a prerequisite";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                course.addPrereqs(s);
 
-                            String warningMsg = "Prerequisite Added";
-                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                                String warningMsg = "Prerequisite Added";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
                         }
                         else{
-                            String warningMsg = "This course does not exist.\nIf you would like to add it as a prerequisite\nplease go back and it as a course.";
+                            String warningMsg = "This course does not yet exist.";
                             Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                         }
                     }
