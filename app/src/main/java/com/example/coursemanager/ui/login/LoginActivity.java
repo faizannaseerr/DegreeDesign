@@ -38,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
@@ -274,10 +276,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //new acc
                 else if (registerAction[0] == 2) {
+
                     User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
                     DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
                     ref.child("students").child(usernameEditText.getText().toString()).setValue(user);
-                    startActivity(new Intent(LoginActivity.this, MainActivityStudent.class));
+
+                    // part of the fix for bugs where new student accounts don't display name and crash when adding courses
+                    Intent passer = new Intent(LoginActivity.this, MainActivityStudent.class);
+                    passer.putExtra("username", usernameEditText.getText().toString());
+                    passer.putExtra("Table Name", "coursesTaken");
+                    startActivity(passer);
                 }
             }
         });

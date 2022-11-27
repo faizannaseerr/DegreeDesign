@@ -36,8 +36,8 @@ public class FirstFragmentStudent extends Fragment {
         binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
         MainActivityStudent activity = (MainActivityStudent) getActivity();
         binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
-        setTable(binding.takenTable, "Courses Taken");
-        setTable(binding.wantedTable,"Courses Wanted");
+        setTable(binding.takenTable, "coursesTaken");
+        setTable(binding.wantedTable,"coursesWanted");
         return binding.getRoot();
 
     }
@@ -66,7 +66,8 @@ public class FirstFragmentStudent extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = getActivity().getIntent();
-                intent.putExtra("Table Name", "Courses Taken");
+                intent.removeExtra("Table Name");
+                intent.putExtra("Table Name", "coursesTaken");
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
@@ -76,7 +77,9 @@ public class FirstFragmentStudent extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = getActivity().getIntent();
-                intent.putExtra("Table Name", "Courses Wanted");
+                intent.removeExtra("Table Name");
+                intent.putExtra("Table Name", "coursesWanted");
+
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }

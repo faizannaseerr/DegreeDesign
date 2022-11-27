@@ -1,5 +1,7 @@
 package com.example.coursemanager.ui.login;
 
+import java.util.ArrayList;
+
 public class User {
     public String email;
     public String password;

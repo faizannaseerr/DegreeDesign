@@ -79,7 +79,7 @@ public class SecondFragmentStudent extends Fragment {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     courseName = "";
                     for (DataSnapshot newSnap : datasnapshot.getChildren()) {
-                        if (newSnap.getKey().compareTo("Name") == 0) {
+                        if (newSnap.getKey().compareTo("courseCode") == 0) {
                             courseName = (String) newSnap.getValue();
                         }
                     }
@@ -107,12 +107,12 @@ public class SecondFragmentStudent extends Fragment {
 
                                 //This is to prevent students from wishlisting
                                 //courses they've already taken
-                                if (child_name.compareTo("Courses Wanted") == 0) {
+                                if (child_name.compareTo("coursesWanted") == 0) {
                                     DatabaseReference ref2 = FirebaseDatabase
                                             .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
                                             .getReference().child("students")
                                             .child(((MainActivityStudent) getActivity()).getUsername())
-                                            .child("Courses Taken");
+                                            .child("coursesTaken");
                                     names2.add(finalName);
 
                                     ref2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -184,12 +184,12 @@ public class SecondFragmentStudent extends Fragment {
                                             ref.child(course.getText().toString()).setValue(true);
 
                                             //To prevent wishlisting a course already taken
-                                            if (child_name.compareTo("Courses Taken") == 0){
+                                            if (child_name.compareTo("coursesTaken") == 0){
                                                 DatabaseReference ref3 = FirebaseDatabase
                                                         .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
                                                         .getReference().child("students")
                                                         .child(((MainActivityStudent) getActivity()).getUsername())
-                                                        .child("Courses Wanted");
+                                                        .child("coursesWanted");
                                                 ref3.child(course.getText().toString()).removeValue();
                                             }
 
