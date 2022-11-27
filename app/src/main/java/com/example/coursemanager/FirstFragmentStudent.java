@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
@@ -35,8 +36,8 @@ public class FirstFragmentStudent extends Fragment {
         binding = FragmentFirstStudentBinding.inflate(inflater, container, false);
         MainActivityStudent activity = (MainActivityStudent) getActivity();
         binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
-        takenCoursesTable(binding.takenTable, "Courses Taken");
-        takenCoursesTable(binding.wantedTable,"Courses Wanted");
+        setTable(binding.takenTable, "Courses Taken");
+        setTable(binding.wantedTable,"Courses Wanted");
         return binding.getRoot();
 
     }
@@ -60,6 +61,26 @@ public class FirstFragmentStudent extends Fragment {
                 startActivity(intent);
             }
         });
+
+        binding.addButton1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = getActivity().getIntent();
+                intent.putExtra("Table Name", "Courses Taken");
+                NavHostFragment.findNavController(FirstFragmentStudent.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
+
+        binding.addButton2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = getActivity().getIntent();
+                intent.putExtra("Table Name", "Courses Wanted");
+                NavHostFragment.findNavController(FirstFragmentStudent.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+            }
+        });
     }
 
     @Override
@@ -68,7 +89,7 @@ public class FirstFragmentStudent extends Fragment {
         binding = null;
     }
 
-    protected void takenCoursesTable(TableLayout table, String child_name){
+    protected void setTable(TableLayout table, String child_name){
         DatabaseReference ref = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
                 .getReference().child("students")
@@ -94,6 +115,14 @@ public class FirstFragmentStudent extends Fragment {
                     edit.setText("Delete");
                     table.addView(row, i);
                     i++;
+                    edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ref.child(course.getText().toString()).removeValue();
+                            NavHostFragment.findNavController(FirstFragmentStudent.this)
+                                    .navigate(R.id.action_FirstFragment_self);
+                        }
+                    });
                 }
             }
             @Override

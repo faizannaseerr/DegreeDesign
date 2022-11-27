@@ -33,13 +33,6 @@ public class MainActivityStudent extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -54,6 +47,15 @@ public class MainActivityStudent extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
             name = bundle.getString("username");
+        }
+        return name;
+    }
+
+    public String getTableName(){
+        String name = "";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            name = bundle.getString("Table Name");
         }
         return name;
     }
