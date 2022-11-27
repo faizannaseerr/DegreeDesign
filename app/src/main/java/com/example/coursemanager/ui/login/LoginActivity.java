@@ -121,6 +121,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                // You can no longer type "."
+                // This prevents a crash
+                if (usernameEditText.getText().toString().endsWith(".")){
+                    usernameEditText.setText(usernameEditText.getText().subSequence(0, usernameEditText.getText().length() - 1));
+                }
+
                 // All the below code checks the database and if all the information of the user matches
                 // completely with a user from the database
                 User user = new User (usernameEditText.getText().toString(), passwordEditText.getText().toString());
