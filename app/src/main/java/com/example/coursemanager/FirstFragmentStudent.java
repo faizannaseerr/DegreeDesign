@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
@@ -114,6 +115,14 @@ public class FirstFragmentStudent extends Fragment {
                     edit.setText("Delete");
                     table.addView(row, i);
                     i++;
+                    edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ref.child(course.getText().toString()).removeValue();
+                            NavHostFragment.findNavController(FirstFragmentStudent.this)
+                                    .navigate(R.id.action_FirstFragment_self);
+                        }
+                    });
                 }
             }
             @Override
