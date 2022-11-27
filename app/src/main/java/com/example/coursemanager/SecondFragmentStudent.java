@@ -182,6 +182,17 @@ public class SecondFragmentStudent extends Fragment {
                                         @Override
                                         public void onClick(View v) {
                                             ref.child(course.getText().toString()).setValue(true);
+
+                                            //To prevent wishlisting a course already taken
+                                            if (child_name.compareTo("Courses Taken") == 0){
+                                                DatabaseReference ref3 = FirebaseDatabase
+                                                        .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                                                        .getReference().child("students")
+                                                        .child(((MainActivityStudent) getActivity()).getUsername())
+                                                        .child("Courses Wanted");
+                                                ref3.child(course.getText().toString()).removeValue();
+                                            }
+
                                             NavHostFragment.findNavController(SecondFragmentStudent.this)
                                                     .navigate(R.id.action_SecondFragment_to_FirstFragment);
                                         }
