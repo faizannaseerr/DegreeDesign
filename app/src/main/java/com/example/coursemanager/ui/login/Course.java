@@ -54,4 +54,14 @@ public class Course {
         this.summer = summer;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Course)){
+            return false;
+        }
+        Course course = (Course) obj;
+
+        return (courseCode.compareTo(course.courseCode) == 0);
+    }
+
 }

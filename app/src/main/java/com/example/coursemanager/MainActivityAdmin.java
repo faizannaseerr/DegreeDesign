@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.CheckBox;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,6 +35,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
