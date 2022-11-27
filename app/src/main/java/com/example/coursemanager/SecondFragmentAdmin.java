@@ -58,9 +58,10 @@ public class SecondFragmentAdmin extends Fragment {
         });
 
         final EditText CourseCode = binding.CourseCode;
+        final EditText Prereq = binding.prereq;
 
 
-        // Gets the text from the Course Code and sets the field coursecode of our Course object to the input
+        // Gets the text from the Course Code and sets the field courseCode of our Course object to the input
         TextWatcher course_code_watcher = new TextWatcher() {
 
             @Override
@@ -79,6 +80,8 @@ public class SecondFragmentAdmin extends Fragment {
 
         CourseCode.addTextChangedListener(course_code_watcher);
 
+
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
         CheckBox fallbox = getView().findViewById(R.id.fall);
         fallbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -88,6 +91,7 @@ public class SecondFragmentAdmin extends Fragment {
             }
         });
 
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
         CheckBox winterbox = getView().findViewById(R.id.winter);
         winterbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -97,6 +101,7 @@ public class SecondFragmentAdmin extends Fragment {
             }
         });
 
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
         CheckBox summerbox = getView().findViewById(R.id.summer);
         summerbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -107,19 +112,59 @@ public class SecondFragmentAdmin extends Fragment {
         });
 
 
+        getView().findViewById(R.id.add_prereq).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = Prereq.getText().toString();
+                ref.child(s).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            course.addPrereqs(s.toString());
+
+                            String warningMsg = "Prerequisite Added";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            String warningMsg = "This course does not exist.\nIf you would like to add it as a prerequisite\nplease go back and it as a course.";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                Prereq.setText("");
+            }
+        });
+
+
+        // Use the "Create Course" button to add a course to the database with the input information
         getView().findViewById(R.id.generate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                // Use this listener on the course code that is being enetered to check if exists in the database already
                 ref.child(course.getCourseCode()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
+
+                            // If the course already exists tell the user
                             String warningMsg = "The course already exists.\nTry going back and editing the course";
                             Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                         }
                         else{
+
+                            // If the course isn't in the database, add it
                             ref.child(course.getCourseCode()).setValue(course);
+
+                            String warningMsg = "Course Added";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+
                             NavHostFragment.findNavController(SecondFragmentAdmin.this)
                                     .navigate(R.id.action_SecondFragment_to_FirstFragment);
                         }

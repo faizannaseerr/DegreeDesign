@@ -26,8 +26,8 @@ public class Course {
         return prereqs;
     }
 
-    public void setPrereqs(ArrayList<String> prereqs) {
-        this.prereqs = prereqs;
+    public void addPrereqs(String prereqs) {
+        this.prereqs.add(prereqs);
     }
 
     public boolean isFall() {

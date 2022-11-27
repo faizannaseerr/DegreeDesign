@@ -33,6 +33,8 @@
     <string name="fall">Fall</string>
     <string name="winter">Winter</string>
     <string name="summer">Summer</string>
-    <string name="create_course">Create</string>
+    <string name="create_course">Create Course</string>
+    <string name="prereq">Prerequisites</string>
+    <string name="prereqHint">Add a prerequisite</string>
 
 </resources>
