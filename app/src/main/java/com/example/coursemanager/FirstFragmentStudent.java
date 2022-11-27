@@ -67,7 +67,6 @@ public class FirstFragmentStudent extends Fragment {
             public void onClick(View view) {
                 //register crash fix
                 Intent intent = getActivity().getIntent();
-                intent.removeExtra("Table Name");
                 intent.putExtra("Table Name", "coursesTaken");
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
@@ -79,7 +78,6 @@ public class FirstFragmentStudent extends Fragment {
             public void onClick(View view) {
                 //register crash fix
                 Intent intent = getActivity().getIntent();
-                intent.removeExtra("Table Name");
                 intent.putExtra("Table Name", "coursesWanted");
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);

@@ -281,10 +281,9 @@ public class LoginActivity extends AppCompatActivity {
                     DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
                     ref.child("students").child(usernameEditText.getText().toString()).setValue(user);
 
-                    // part of the fix for bugs where new student accounts don't display name and crash when adding courses
+                    //fix for bugs where new student accounts don't display name and crash when adding courses
                     Intent passer = new Intent(LoginActivity.this, MainActivityStudent.class);
                     passer.putExtra("username", usernameEditText.getText().toString());
-                    passer.putExtra("Table Name", "coursesTaken");
                     startActivity(passer);
                 }
             }
