@@ -1,5 +1,6 @@
 package com.example.coursemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentSecondStudentBinding;
+import com.example.coursemanager.ui.login.LoginActivity;
+import com.example.coursemanager.ui.login.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -139,6 +142,14 @@ public class SecondFragmentStudent extends Fragment {
                                                 edit.setText("Add");
                                                 table.addView(row, i);
                                                 i++;
+                                                edit.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        ref.child(course.getText().toString()).setValue(true);
+                                                        NavHostFragment.findNavController(SecondFragmentStudent.this)
+                                                                .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                                                    }
+                                                });
                                             }
                                             names2.remove(0);
                                         }
@@ -167,6 +178,14 @@ public class SecondFragmentStudent extends Fragment {
                                     edit.setText("Add");
                                     table.addView(row, i);
                                     i++;
+                                    edit.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            ref.child(course.getText().toString()).setValue(true);
+                                            NavHostFragment.findNavController(SecondFragmentStudent.this)
+                                                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                                        }
+                                    });
                                 }
                             }
                         }
