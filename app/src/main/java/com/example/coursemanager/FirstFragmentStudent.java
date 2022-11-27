@@ -1,11 +1,14 @@
 package com.example.coursemanager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 public class FirstFragmentStudent extends Fragment {
 
@@ -110,11 +115,17 @@ public class FirstFragmentStudent extends Fragment {
                     TextView course = new TextView(getActivity());
                     course.setId(2000+i);
                     row.addView(course);
+                    TextView space = new TextView(getActivity());
+                    space.setId(3000+i);
+                    row.addView(space);
                     Button edit = new Button(getActivity());
-                    edit.setId(3000+i);
+                    edit.setId(4000+i);
                     row.addView(edit);
                     course.setText(datasnapshot.getKey());
                     edit.setText("Delete");
+                    edit.setTextColor(Color.rgb(0,0,0));
+                    edit.setBackgroundColor(Color.rgb(243,204,85));
+                    space.setText("        ");
                     table.addView(row, i);
                     i++;
                     edit.setOnClickListener(new View.OnClickListener() {
