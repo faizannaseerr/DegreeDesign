@@ -165,14 +165,20 @@ public class SecondFragmentAdmin extends Fragment {
                         }
                         else{
 
-                            // If the course isn't in the database, add it
-                            ref.child(course.getCourseCode()).setValue(course);
+                            // Block course creation if no sections are selected
+                            if (!course.isFall() && !course.isWinter() && !course.isSummer()){
+                                String warningMsg = "Please select offering sessions";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                ref.child(course.getCourseCode()).setValue(course);
 
-                            String warningMsg = "Course Added";
-                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                                String warningMsg = "Course Added";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
 
-                            NavHostFragment.findNavController(SecondFragmentAdmin.this)
-                                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                                NavHostFragment.findNavController(SecondFragmentAdmin.this)
+                                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                            }
                         }
                     }
 
