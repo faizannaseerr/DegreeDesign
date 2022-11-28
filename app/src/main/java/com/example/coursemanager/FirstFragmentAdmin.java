@@ -24,6 +24,8 @@ public class FirstFragmentAdmin extends Fragment {
     ) {
 
         binding = FragmentFirstAdminBinding.inflate(inflater, container, false);
+        MainActivityAdmin activity = (MainActivityAdmin) getActivity();
+        binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
         return binding.getRoot();
 
     }
