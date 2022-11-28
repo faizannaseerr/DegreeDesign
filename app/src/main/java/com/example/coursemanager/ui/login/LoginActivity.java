@@ -123,8 +123,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // You can no longer type "."
                 // This prevents a crash
-                if (usernameEditText.getText().toString().endsWith(".")){
-                    usernameEditText.setText(usernameEditText.getText().subSequence(0, usernameEditText.getText().length() - 1));
+                if (usernameEditText.getText().toString().contains(".")){
+                    usernameEditText.setText(usernameEditText.getText().toString().replaceAll("[.]", ""));
                 }
 
                 // All the below code checks the database and if all the information of the user matches
