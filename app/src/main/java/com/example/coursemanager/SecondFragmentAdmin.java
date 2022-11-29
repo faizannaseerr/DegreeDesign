@@ -165,14 +165,26 @@ public class SecondFragmentAdmin extends Fragment {
                         }
                         else{
 
-                            // If the course isn't in the database, add it
-                            ref.child(course.getCourseCode()).setValue(course);
+                            String courseCode = course.getCourseCode();
+                            // Block course creation if no sections are selected
+                            if (!course.isFall() && !course.isWinter() && !course.isSummer()){
+                                String warningMsg = "Please select offering sessions";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
+                            // Block course creation if course code is invalid
+                            else if (courseCode.length() != 6 || !courseCode.substring(0,3).matches("[A-Z]+") || !courseCode.substring(3,4).matches("^[A-D]") || !courseCode.substring(4).matches("^[0-9]*$")){
+                                String warningMsg = "Please enter a valid course code";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                ref.child(course.getCourseCode()).setValue(course);
 
-                            String warningMsg = "Course Added";
-                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                                String warningMsg = "Course Added";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
 
-                            NavHostFragment.findNavController(SecondFragmentAdmin.this)
-                                    .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                                NavHostFragment.findNavController(SecondFragmentAdmin.this)
+                                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                            }
                         }
                     }
 
