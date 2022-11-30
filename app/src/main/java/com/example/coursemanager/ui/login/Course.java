@@ -3,6 +3,7 @@ package com.example.coursemanager.ui.login;
 import java.util.ArrayList;
 
 public class Course {
+    String courseName;
     String courseCode;
     ArrayList<String> prereqs;
     boolean fall;
@@ -10,8 +11,17 @@ public class Course {
     boolean summer;
 
     public Course(){
+        courseName = "";
         courseCode = "";
         prereqs = new ArrayList<String>();
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getCourseCode() {

@@ -29,6 +29,7 @@
     <string name="courses_wanted_name">Courses to Schedule</string>
 
     <string name="add_course">Add Course</string>
+    <string name="course_name">Course Name</string>
     <string name="course_code">Course Code</string>
     <string name="offering_sessions">Offering Sessions</string>
     <string name="fall">Fall</string>

@@ -57,6 +57,7 @@ public class SecondFragmentAdmin extends Fragment {
             }
         });
 
+        final EditText CourseName = binding.courseName;
         final EditText CourseCode = binding.CourseCode;
         final EditText Prereq = binding.prereq;
 
@@ -79,6 +80,25 @@ public class SecondFragmentAdmin extends Fragment {
         };
 
         CourseCode.addTextChangedListener(course_code_watcher);
+
+
+        TextWatcher course_name_watcher = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                course.setCourseName(s.toString());
+            }
+        };
+
+        CourseName.addTextChangedListener(course_name_watcher);
 
 
         // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
@@ -174,6 +194,11 @@ public class SecondFragmentAdmin extends Fragment {
                             // Block course creation if course code is invalid
                             else if (courseCode.length() != 6 || !courseCode.substring(0,3).matches("[A-Z]+") || !courseCode.substring(3,4).matches("^[A-D]") || !courseCode.substring(4).matches("^[0-9]*$")){
                                 String warningMsg = "Please enter a valid course code";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
+                            // Block course creation if the user does not enter a course name
+                            else if(course.getCourseName().compareTo("") == 0){
+                                String warningMsg = "Please enter a course name";
                                 Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                             }
                             else{

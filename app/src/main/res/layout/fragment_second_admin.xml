@@ -30,7 +30,7 @@
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/CourseCode"
+        app:layout_constraintBottom_toTopOf="@+id/courseName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
         android:id="@+id/CourseCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginTop="22dp"
         android:capitalize="characters"
         android:ems="10"
         android:hint="@string/course_code"
@@ -48,10 +48,10 @@
         android:textIsSelectable="true"
         app:layout_constraintBottom_toTopOf="@+id/offeringSessions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.985" />
+        app:layout_constraintTop_toBottomOf="@+id/courseName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/fall"
@@ -158,5 +158,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/summer"
         app:layout_constraintVertical_bias="0.053" />
+
+    <EditText
+        android:id="@+id/courseName"
+        android:layout_width="165dp"
+        android:layout_height="43dp"
+        android:ems="10"
+        android:hint="@string/course_name"
+        android:inputType="textEmailAddress"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/offeringSessions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
