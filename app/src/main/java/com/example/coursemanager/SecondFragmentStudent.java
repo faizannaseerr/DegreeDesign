@@ -1,6 +1,7 @@
 package com.example.coursemanager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,11 +136,17 @@ public class SecondFragmentStudent extends Fragment {
                                                 TextView course = new TextView(getActivity());
                                                 course.setId(2000 + i);
                                                 row.addView(course);
+                                                TextView space = new TextView(getActivity());
+                                                space.setId(3000+i);
+                                                row.addView(space);
                                                 Button edit = new Button(getActivity());
-                                                edit.setId(3000 + i);
+                                                edit.setId(4000 + i);
                                                 row.addView(edit);
                                                 course.setText(names2.get(0));
                                                 edit.setText("Add");
+                                                edit.setTextColor(Color.rgb(0,0,0));
+                                                edit.setBackgroundColor(Color.rgb(243,204,85));
+                                                space.setText("        ");
                                                 table.addView(row, i);
                                                 i++;
                                                 edit.setOnClickListener(new View.OnClickListener() {
@@ -171,11 +178,17 @@ public class SecondFragmentStudent extends Fragment {
                                     TextView course = new TextView(getActivity());
                                     course.setId(2000 + i);
                                     row.addView(course);
+                                    TextView space = new TextView(getActivity());
+                                    space.setId(3000+i);
+                                    row.addView(space);
                                     Button edit = new Button(getActivity());
-                                    edit.setId(3000 + i);
+                                    edit.setId(4000 + i);
                                     row.addView(edit);
                                     course.setText(finalName);
                                     edit.setText("Add");
+                                    edit.setTextColor(Color.rgb(0,0,0));
+                                    edit.setBackgroundColor(Color.rgb(243,204,85));
+                                    space.setText("        ");
                                     table.addView(row, i);
                                     i++;
                                     edit.setOnClickListener(new View.OnClickListener() {
