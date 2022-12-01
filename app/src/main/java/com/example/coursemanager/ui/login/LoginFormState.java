@@ -3,7 +3,7 @@ package com.example.coursemanager.ui.login;
 import androidx.annotation.Nullable;
 
 /**
- * Data validation state of the login form.
+ * validate state of the login form.
  */
 class LoginFormState {
     @Nullable
