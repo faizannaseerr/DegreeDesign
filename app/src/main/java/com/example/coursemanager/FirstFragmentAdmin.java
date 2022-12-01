@@ -139,8 +139,11 @@ public class FirstFragmentAdmin extends Fragment {
                             edit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Intent intent = getActivity().getIntent();
+                                    intent.putExtra("courseCode", finalName);
 
-                                    // Make an Edit Fragment
+                                    NavHostFragment.findNavController(FirstFragmentAdmin.this)
+                                            .navigate(R.id.action_FirstFragment_to_thirdFragmentAdmin);
 
                                 }
                             });

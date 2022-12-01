@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_thirdFragmentAdmin"
+            app:destination="@id/thirdFragmentAdmin" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -24,5 +27,17 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thirdFragmentAdmin"
+        android:name="com.example.coursemanager.ThirdFragmentAdmin"
+        android:label="fragment_third_admin"
+        tools:layout="@layout/fragment_third_admin" >
+        <action
+            android:id="@+id/action_thirdFragmentAdmin_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_thirdFragmentAdmin_self"
+            app:destination="@id/thirdFragmentAdmin" />
     </fragment>
 </navigation>

@@ -61,4 +61,14 @@ public class MainActivityAdmin extends AppCompatActivity {
         }
         return name;
     }
+
+    public String getCourseCode() {
+        String name = "";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            name = bundle.getString("courseCode");
+        }
+        return name;
+    }
+
 }

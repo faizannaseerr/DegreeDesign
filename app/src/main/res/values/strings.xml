@@ -39,4 +39,7 @@
     <string name="prereq">Prerequisites</string>
     <string name="prereqHint">Add a prerequisite</string>
 
+    <string name="edit_course">Edit </string>
+    <string name="edit_button">Change Course</string>
+
 </resources>
