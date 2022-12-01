@@ -144,12 +144,20 @@ public class SecondFragmentAdmin extends Fragment {
                                 String warningMsg = "This course is already a prerequisite";
                                 Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                             }
+                            else if(s.compareTo("")==0){
+                                String warningMsg = "Please specify the prerequisite";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                            }
                             else{
                                 course.addPrereqs(s);
 
                                 String warningMsg = "Prerequisite Added";
                                 Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                             }
+                        }
+                        else if(s.compareTo(course.getCourseCode().toString())==0){
+                            String warningMsg = "The course cannot be a prerequisite\nfor itself";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                         }
                         else{
                             String warningMsg = "This course does not yet exist.";
