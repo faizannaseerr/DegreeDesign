@@ -1,10 +1,15 @@
 package com.example.coursemanager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,10 +17,22 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentFirstAdminBinding;
 import com.example.coursemanager.ui.login.LoginActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstFragmentAdmin extends Fragment {
 
     private FragmentFirstAdminBinding binding;
+    static String Code;
+    static List<String> names;
+    static int i;
+    static int k;
 
     @Override
     public View onCreateView(
@@ -26,6 +43,8 @@ public class FirstFragmentAdmin extends Fragment {
         binding = FragmentFirstAdminBinding.inflate(inflater, container, false);
         MainActivityAdmin activity = (MainActivityAdmin) getActivity();
         binding.textviewFirst.setText("Welcome, " + activity.getUsername() + "!");
+        setAdminTable(binding.addTable, activity.getTableName());
+        names = new ArrayList<String>();
         return binding.getRoot();
 
     }
@@ -55,6 +74,97 @@ public class FirstFragmentAdmin extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    protected void setAdminTable(TableLayout table, String child_name) {
+        DatabaseReference courseRef = FirebaseDatabase
+                .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                .getReference().child("Courses");
+        courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                i=0;
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    Code = "";
+                    for (DataSnapshot newSnap : datasnapshot.getChildren()) {
+                        if (newSnap.getKey().compareTo("courseCode") == 0) {
+                            Code = (String) newSnap.getValue();
+                        }
+                    }
+                    names.add(Code);
+                }
+                for (String name : names){
+                    final String finalName = name;
+
+                    courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            //This is normal behaviour
+                            TableRow row = new TableRow(getActivity());
+                            TableRow.LayoutParams params =
+                                    new TableRow.LayoutParams(TableRow
+                                            .LayoutParams.WRAP_CONTENT);
+                            row.setLayoutParams(params);
+                            row.setId(1000 + i);
+                            TextView course = new TextView(getActivity());
+                            course.setId(2000 + i);
+                            row.addView(course);
+                            TextView space = new TextView(getActivity());
+                            space.setId(3000+i);
+                            row.addView(space);
+
+                            Button edit = new Button(getActivity());
+                            edit.setId(4000 + i);
+                            row.addView(edit);
+                            course.setText(finalName);
+                            edit.setText("Edit");
+                            edit.setTextColor(Color.rgb(0,0,0));
+                            edit.setBackgroundColor(Color.rgb(0,239,239));
+                            TextView button_space = new TextView(getActivity());
+                            space.setId(5000+i);
+                            row.addView(button_space);
+
+                            Button delete = new Button(getActivity());
+                            delete.setId(6000 + i);
+                            row.addView(delete);
+                            course.setText(finalName);
+                            delete.setText("Delete");
+                            delete.setTextColor(Color.rgb(0,0,0));
+                            delete.setBackgroundColor(Color.rgb(0,239,239));
+
+                            space.setText("     ");
+                            button_space.setText("  ");
+                            table.addView(row, i);
+                            i++;
+                            edit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    // Make an Edit Fragment
+
+                                }
+                            });
+                            delete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    // Make a Delete fragment/function
+
+                                }
+                            });
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
     }
 
 }

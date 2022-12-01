@@ -52,4 +52,13 @@ public class MainActivityAdmin extends AppCompatActivity {
         }
         return name;
     }
+
+    public String getTableName(){
+        String name = "";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            name = bundle.getString("Table Name");
+        }
+        return name;
+    }
 }
