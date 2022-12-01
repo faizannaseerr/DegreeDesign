@@ -1,5 +1,6 @@
 package com.example.coursemanager.ui.login;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,5 +14,13 @@ public class LoginModel {
 
     public LoginModel(String str1, String str2) {
         this.user = new User(str1, str2);
+    }
+
+    public boolean checkPassword(String pass) {
+        return(user.password.compareTo(pass) == 0);
+    }
+
+    public void createNewAccount() {
+        ref.child("students").child(user.email).setValue(user);
     }
 }

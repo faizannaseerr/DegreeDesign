@@ -98,7 +98,7 @@ public class LoginPresenter extends ViewModel {
 
                             DataSnapshot ds = task.getResult();
                             User login = ds.getValue(User.class);
-                            if(loginModel.user.password.compareTo(login.getPassword()) == 0){
+                            if(loginModel.checkPassword(login.getPassword())){
                                 // Checks if the password entered matches the password of the given email.
                                 // If it does, bring them to the student landing page
                                 loginAction[0] = 3;
@@ -145,7 +145,7 @@ public class LoginPresenter extends ViewModel {
 
                             DataSnapshot ds = task.getResult();
                             User login = ds.getValue(User.class);
-                            if(loginModel.user.password.compareTo(login.getPassword()) == 0){
+                            if(loginModel.checkPassword(login.getPassword())){
 
                                 // Checks if the password entered matches the password of the given email.
                                 // If it does, bring them to the admin landing page
@@ -193,8 +193,7 @@ public class LoginPresenter extends ViewModel {
         //new acc
         else if (registerAction[0] == 2) {
             LoginModel loginModel = new LoginModel(username, pass);
-
-            loginModel.ref.child("students").child(username).setValue(loginModel.user);
+            loginModel.createNewAccount();
 
             //fix for bugs where new student accounts don't display name and crash when adding courses
             loginActivity.completeActivity(username, true);
