@@ -40,6 +40,10 @@ public class Course {
         this.prereqs.add(prereqs);
     }
 
+    public ArrayList<String> setPrereqs(ArrayList<String> s) {
+        return s;
+    }
+
     public boolean isFall() {
         return fall;
     }

@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.coursemanager.databinding.FragmentSecondAdminBinding;
 import com.example.coursemanager.databinding.FragmentThirdAdminBinding;
 import com.example.coursemanager.ui.login.Course;
 import com.example.coursemanager.ui.login.LoginActivity;
@@ -37,7 +36,7 @@ import java.util.List;
 
 public class ThirdFragmentAdmin extends Fragment {
     private FragmentThirdAdminBinding binding;
-    Course course = new Course();
+    static Course course = new Course();
     static int i;
     static ArrayList<String> prereqList = new ArrayList<>();
     static String req;
@@ -76,8 +75,8 @@ public class ThirdFragmentAdmin extends Fragment {
         String editCourseCode = activity.getCourseCode();
 
         final EditText CourseName = binding.editcourseName;
-        final EditText CourseCode = binding.editCourseCode;
         final EditText Prereq = binding.editprereq;
+
 
         DatabaseReference courseRef = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
@@ -93,18 +92,17 @@ public class ThirdFragmentAdmin extends Fragment {
                     CourseName.setText("");
                 }
 
-
-                CourseCode.setText(snapshot.child("courseCode").getValue().toString());
-
-
                 CheckBox editfallbox = getView().findViewById(R.id.editfall);
                 editfallbox.setChecked(snapshot.child("fall").getValue().toString().compareTo("true") == 0);
+                course.setFall(editfallbox.isChecked());
 
                 CheckBox editwinterbox = getView().findViewById(R.id.editwinter);
                 editwinterbox.setChecked(snapshot.child("winter").getValue().toString().compareTo("true") == 0);
+                course.setWinter(editwinterbox.isChecked());
 
                 CheckBox editsummerbox = getView().findViewById(R.id.editsummer);
                 editsummerbox.setChecked(snapshot.child("summer").getValue().toString().compareTo("true") == 0);
+                course.setSummer(editsummerbox.isChecked());
 
 
                 getView().findViewById(R.id.editadd_prereq).setOnClickListener(new View.OnClickListener() {
@@ -167,165 +165,98 @@ public class ThirdFragmentAdmin extends Fragment {
             }
         });
 
+        TextWatcher course_name_watcher = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                course.setCourseName(s.toString());
+            }
+        };
+
+        CourseName.addTextChangedListener(course_name_watcher);
 
 
-//
-//
-//        // Gets the text from the Course Code and sets the field courseCode of our Course object to the input
-//        TextWatcher course_code_watcher = new TextWatcher() {
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                course.setCourseCode(s.toString());
-//            }
-//        };
-//
-//        CourseCode.addTextChangedListener(course_code_watcher);
-//
-//
-//        TextWatcher course_name_watcher = new TextWatcher() {
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                course.setCourseName(s.toString());
-//            }
-//        };
-//
-//        CourseName.addTextChangedListener(course_name_watcher);
-//
-//
-//        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
-//        CheckBox fallbox = getView().findViewById(R.id.fall);
-//        fallbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                course.setFall(isChecked);
-//            }
-//        });
-//
-//        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
-//        CheckBox winterbox = getView().findViewById(R.id.winter);
-//        winterbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                course.setWinter(isChecked);
-//            }
-//        });
-//
-//        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
-//        CheckBox summerbox = getView().findViewById(R.id.summer);
-//        summerbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                course.setSummer(isChecked);
-//            }
-//        });
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
+        CheckBox fallbox = getView().findViewById(R.id.editfall);
+        fallbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                course.setFall(fallbox.isChecked());
+            }
+        });
+
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
+        CheckBox winterbox = getView().findViewById(R.id.editwinter);
+        winterbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                course.setWinter(winterbox.isChecked());
+            }
+        });
+
+        // Checks if the session checkbox is checked or not and assigns the corresponding boolean to our Course object
+        CheckBox summerbox = getView().findViewById(R.id.editsummer);
+        summerbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                course.setSummer(summerbox.isChecked());
+            }
+        });
 
 
-//        getView().findViewById(R.id.add_prereq).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String s = Prereq.getText().toString();
-//                ref.child(s).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.exists()) {
-//                            if (course.getPrereqs().contains(s)) {
-//                                String warningMsg = "This course is already a prerequisite";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                            } else {
-//                                course.addPrereqs(s);
-//
-//                                String warningMsg = "Prerequisite Added";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                            }
-//                        } else {
-//                            String warningMsg = "This course does not yet exist.";
-//                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//
-//                Prereq.setText("");
-//            }
-//        });
+//      Use the "Create Course" button to add a course to the database with the input information
+        getView().findViewById(R.id.edit_course_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Use this listener on the course code that is being enetered to check if exists in the database already
+                courseRef.child(editCourseCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                        // Block course creation if no sections are selected
+                        if (!course.isFall() && !course.isWinter() && !course.isSummer()) {
+                            String warningMsg = "Please select offering sessions";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                        }
+                        // Block course creation if the user does not enter a course name
+                        else if (course.getCourseName().compareTo("") == 0) {
+                            String warningMsg = "Please enter a course name";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            courseRef.child(editCourseCode).child("courseName").setValue(course.getCourseName());
+                            courseRef.child(editCourseCode).child("fall").setValue(course.isFall());
+                            courseRef.child(editCourseCode).child("winter").setValue(course.isWinter());
+                            courseRef.child(editCourseCode).child("summer").setValue(course.isSummer());
 
-        // Use the "Create Course" button to add a course to the database with the input information
-//        getView().findViewById(R.id.generate).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                // Use this listener on the course code that is being enetered to check if exists in the database already
-//                ref.child(course.getCourseCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.exists()) {
-//
-//                            // If the course already exists tell the user
-//                            String warningMsg = "The course already exists.\nTry going back and editing the course";
-//                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                        } else {
-//
-//                            String courseCode = course.getCourseCode();
-//                            // Block course creation if no sections are selected
-//                            if (!course.isFall() && !course.isWinter() && !course.isSummer()) {
-//                                String warningMsg = "Please select offering sessions";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                            }
-//                            // Block course creation if course code is invalid
-//                            else if (courseCode.length() != 6 || !courseCode.substring(0, 3).matches("[A-Z]+") || !courseCode.substring(3, 4).matches("^[A-D]") || !courseCode.substring(4).matches("^[0-9]*$")) {
-//                                String warningMsg = "Please enter a valid course code";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                            }
-//                            // Block course creation if the user does not enter a course name
-//                            else if (course.getCourseName().compareTo("") == 0) {
-//                                String warningMsg = "Please enter a course name";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//                            } else {
-//                                ref.child(course.getCourseCode()).setValue(course);
-//
-//                                String warningMsg = "Course Added";
-//                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-//
-//                                NavHostFragment.findNavController(SecondFragmentAdmin.this)
-//                                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//
-//            }
-//        });
+                            String warningMsg = "Course successfully edited";
+                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+
+                            NavHostFragment.findNavController(ThirdFragmentAdmin.this)
+                                    .navigate(R.id.action_thirdFragmentAdmin_to_FirstFragment);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
 
     }
 
