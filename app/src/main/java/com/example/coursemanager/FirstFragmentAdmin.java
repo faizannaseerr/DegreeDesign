@@ -192,9 +192,12 @@ public class FirstFragmentAdmin extends Fragment {
                                                     courseRef.child(ds.child("courseCode").getValue().toString()).child("prereqs").setValue(deletion);
                                                 }
                                             }
-                                            dialog.dismiss();
                                             courseRef.child(finalName).removeValue();
 
+                                            NavHostFragment.findNavController(FirstFragmentAdmin.this)
+                                                    .navigate(R.id.action_FirstFragment_self2);
+
+                                            dialog.dismiss();
                                         }
                                     });
 
