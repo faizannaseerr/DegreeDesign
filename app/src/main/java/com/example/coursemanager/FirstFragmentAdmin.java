@@ -1,5 +1,6 @@
 package com.example.coursemanager;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +34,11 @@ public class FirstFragmentAdmin extends Fragment {
     static List<String> names;
     static int i;
     static int k;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private Button cancel;
+    private Button finalDelete;
 
     @Override
     public View onCreateView(
@@ -150,8 +156,47 @@ public class FirstFragmentAdmin extends Fragment {
                             delete.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    dialogBuilder = new AlertDialog.Builder(getActivity());
+                                    final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+                                    cancel = contactPopupView.findViewById(R.id.delete_cancel);
+                                    finalDelete = contactPopupView.findViewById(R.id.delete_delete);
 
-                                    // Make a Delete fragment/function
+                                    dialogBuilder.setView(contactPopupView);
+                                    dialog = dialogBuilder.create();
+                                    dialog.show();
+
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    finalDelete.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // gets each Course
+                                            for(DataSnapshot ds: snapshot.getChildren()){
+                                                if(ds.child("courseCode").getValue().toString().compareTo(finalName) != 0 && ds.child("prereqs").exists()){
+                                                    ArrayList<String> deletion = (ArrayList) ds.child("prereqs").getValue();
+
+                                                    int isFound = 0;
+                                                    for(String item: deletion){
+                                                        if(item.compareTo(finalName)==0){
+                                                            isFound = 1;
+                                                        }
+                                                    }
+                                                    if(isFound == 1){
+                                                        deletion.remove(finalName);
+                                                    }
+
+                                                    courseRef.child(ds.child("courseCode").getValue().toString()).child("prereqs").setValue(deletion);
+                                                }
+                                            }
+                                            dialog.dismiss();
+                                            courseRef.child(finalName).removeValue();
+
+                                        }
+                                    });
 
                                 }
                             });

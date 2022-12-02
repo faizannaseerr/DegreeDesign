@@ -42,4 +42,8 @@
     <string name="edit_course">Edit </string>
     <string name="edit_button">Change Course</string>
 
+    <string name="delete_cancel_msg">Cancel</string>
+    <string name="delete_delete_msg">Confirm Delete</string>
+    <string name="delete_msg">Are you sure you want to delete this course? It will erase it from the prerequisites of all other courses.</string>
+
 </resources>

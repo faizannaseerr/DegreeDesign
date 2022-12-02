@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_thirdFragmentAdmin"
             app:destination="@id/thirdFragmentAdmin" />
+        <action
+            android:id="@+id/action_FirstFragment_self2"
+            app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
