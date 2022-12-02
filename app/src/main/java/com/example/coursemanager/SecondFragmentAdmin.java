@@ -232,12 +232,6 @@ public class SecondFragmentAdmin extends Fragment {
 
     }
 
-    public void reload() {
-        NavHostFragment.findNavController(SecondFragmentAdmin.this)
-                .navigate(R.id.action_FirstFragment_to_SecondFragment);
-    }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
