@@ -14,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
@@ -79,6 +80,7 @@ public class FirstFragmentStudent extends Fragment {
                 intent.putExtra("Table Name", "coursesTaken");
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         });
 
@@ -90,6 +92,7 @@ public class FirstFragmentStudent extends Fragment {
                 intent.putExtra("Table Name", "coursesWanted");
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         });
     }
@@ -148,4 +151,9 @@ public class FirstFragmentStudent extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
 }

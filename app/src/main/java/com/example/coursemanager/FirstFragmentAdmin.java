@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -63,6 +64,7 @@ public class FirstFragmentAdmin extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragmentAdmin.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         });
 
@@ -150,7 +152,6 @@ public class FirstFragmentAdmin extends Fragment {
 
                                     NavHostFragment.findNavController(FirstFragmentAdmin.this)
                                             .navigate(R.id.action_FirstFragment_to_thirdFragmentAdmin);
-
                                 }
                             });
                             delete.setOnClickListener(new View.OnClickListener() {
@@ -218,4 +219,9 @@ public class FirstFragmentAdmin extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
 }

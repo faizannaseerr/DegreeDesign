@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -29,6 +30,11 @@ public class MainActivityAdmin extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_activity_admin);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
