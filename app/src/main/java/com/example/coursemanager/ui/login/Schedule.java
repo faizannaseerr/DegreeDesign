@@ -30,9 +30,7 @@ public class Schedule {
             if (CoursesWanted.get(i).prereqs.isEmpty() && !CoursesTaken.contains(CoursesWanted.get(i)) && !TotalCourses.contains(CoursesWanted.get(i))) {
                 TotalCourses.add(CoursesWanted.get(i));
                 return TotalCourses;
-            }
-
-            else if (!CoursesTaken.contains(CoursesWanted.get(i)) && !TotalCourses.contains(CoursesWanted.get(i))) {
+            } else if (!CoursesTaken.contains(CoursesWanted.get(i)) && !TotalCourses.contains(CoursesWanted.get(i))) {
                 // need line here to convert string prereqs list to course prereqs list
                 TotalCourses = CreateTotalCoursesArray(CoursesTaken, CoursesWanted.get(i).prereqs, TotalCourses);
                 TotalCourses.add(CoursesWanted.get(i));
@@ -43,31 +41,23 @@ public class Schedule {
 
     }
 
-	/* Things to do later to decrease redundancy/inefficiency:
-			Swap maxCourseCounter with PresentSemCourses.size()
-			Remove three variations of PresentSemCourses and just use .clear() with one declaration
-			Remove all the system.out lines (was added for testing) */
-
     /* Functions goes through total courses thrice, checking for fall winter and summer courses and if prereqs are satisfied then it is added to a Schedule List
        -- this is repeated until all courses have been added and the degree year is also incremented */
 
     public ArrayList<Schedule> CreateSchedule(ArrayList<Course> CoursesTaken, ArrayList<Course> TotalCourses){
         ArrayList<Schedule> DegreeSchedule = new ArrayList<Schedule>();
         int DegreeYear = 1;
-
+        ArrayList<Course> PresentSemCourses = new ArrayList<Course>();
 
 
         while (!TotalCourses.isEmpty()) {
-            int maxCourseCounter = 0;
-            ArrayList<Course> PresentSemCoursesFall = new ArrayList<Course>();
-            System.out.println();
+
+            PresentSemCourses.clear();
             for (int i = 0; i < TotalCourses.size(); i++) {
-                System.out.println(TotalCourses.get(i).getCourseCode());
                 if (TotalCourses.get(i).fall) {
                     if (TotalCourses.get(i).prereqs.isEmpty()) {
                         DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "fall"));
-                        PresentSemCoursesFall.add(TotalCourses.get(i));
-                        maxCourseCounter += 1;
+                        PresentSemCourses.add(TotalCourses.get(i));
                     }
 
                     else {
@@ -81,30 +71,26 @@ public class Schedule {
 
                         if (PreReqsSatisfied) {
                             DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "fall"));
-                            PresentSemCoursesFall.add(TotalCourses.get(i));
-                            maxCourseCounter += 1;
+                            PresentSemCourses.add(TotalCourses.get(i));
                         }
                     }
                 }
 
-                if (maxCourseCounter == 6) {
+                if (PresentSemCourses.size() == 6) {
                     break;
                 }
 
             }
-            CoursesTaken.addAll(PresentSemCoursesFall);
-            TotalCourses.removeAll(PresentSemCoursesFall);
+            CoursesTaken.addAll(PresentSemCourses);
+            TotalCourses.removeAll(PresentSemCourses);
 
-            maxCourseCounter = 0;
-            ArrayList<Course> PresentSemCoursesWinter = new ArrayList<Course>();
-            System.out.println();
+
+            PresentSemCourses.clear();
             for (int i = 0; i < TotalCourses.size(); i++) {
-                System.out.println(TotalCourses.get(i).getCourseCode());
                 if (TotalCourses.get(i).winter) {
                     if (TotalCourses.get(i).prereqs.isEmpty()) {
                         DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "winter"));
-                        PresentSemCoursesWinter.add(TotalCourses.get(i));
-                        maxCourseCounter += 1;
+                        PresentSemCourses.add(TotalCourses.get(i));
                     }
 
                     else {
@@ -118,33 +104,25 @@ public class Schedule {
 
                         if (PreReqsSatisfied) {
                             DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "winter"));
-                            PresentSemCoursesWinter.add(TotalCourses.get(i));
-                            maxCourseCounter += 1;
+                            PresentSemCourses.add(TotalCourses.get(i));
                         }
                     }
                 }
 
-                if (maxCourseCounter == 6) {
+                if (PresentSemCourses.size() == 6) {
                     break;
                 }
 
             }
-            CoursesTaken.addAll(PresentSemCoursesWinter);
-            TotalCourses.removeAll(PresentSemCoursesWinter);
+            CoursesTaken.addAll(PresentSemCourses);
+            TotalCourses.removeAll(PresentSemCourses);
 
-
-
-            maxCourseCounter = 0;
-            ArrayList<Course> PresentSemCoursesSummer = new ArrayList<Course>();
-            System.out.println();
+            PresentSemCourses.clear();
             for (int i = 0; i < TotalCourses.size(); i++) {
-                System.out.println(TotalCourses.get(i).getCourseCode());
-
                 if (TotalCourses.get(i).summer) {
                     if (TotalCourses.get(i).prereqs.isEmpty()) {
                         DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "summer"));
-                        PresentSemCoursesSummer.add(TotalCourses.get(i));
-                        maxCourseCounter += 1;
+                        PresentSemCourses.add(TotalCourses.get(i));
                     }
 
                     else {
@@ -158,19 +136,18 @@ public class Schedule {
 
                         if (PreReqsSatisfied) {
                             DegreeSchedule.add(new Schedule(TotalCourses.get(i), DegreeYear, "summer"));
-                            PresentSemCoursesSummer.add(TotalCourses.get(i));
-                            maxCourseCounter += 1;
+                            PresentSemCourses.add(TotalCourses.get(i));
                         }
                     }
                 }
 
-                if (maxCourseCounter == 6) {
+                if (PresentSemCourses.size() == 6) {
                     break;
                 }
 
             }
-            CoursesTaken.addAll(PresentSemCoursesSummer);
-            TotalCourses.removeAll(PresentSemCoursesSummer);
+            CoursesTaken.addAll(PresentSemCourses);
+            TotalCourses.removeAll(PresentSemCourses);
 
             DegreeYear += 1;
         }
