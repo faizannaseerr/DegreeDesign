@@ -8,12 +8,14 @@ public class Schedule {
     int year;
     String semester;
 
+    // This constructor is used for using the whole algorithm
     public Schedule() {
         this.course = null;
         this.year = 0;
         this.semester = "";
     }
 
+    // This one is used while creating the schedule
     public Schedule(Course course, int year, String semester) {
         this.course = course;
         this.year = year;

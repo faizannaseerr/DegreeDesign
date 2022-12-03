@@ -65,6 +65,7 @@ public class ThirdFragmentStudent extends Fragment {
     // Edit junk above
     // Needs to get courses taken and courses wanted from previous fragment here, converting them to course lists
 
+
     // Then:
 
     Schedule useless = new Schedule ();
