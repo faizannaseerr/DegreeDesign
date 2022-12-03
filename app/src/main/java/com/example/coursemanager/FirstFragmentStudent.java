@@ -51,17 +51,13 @@ public class FirstFragmentStudent extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Temporarily disabling the button to prevent crashes
-        //To be repurposed later as Generate Timeline button
-        /*
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragmentStudent.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                        .navigate(R.id.action_FirstFragment_to_thirdFragmentStudent);
             }
         });
-         */
 
         binding.studentBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_FirstFragment_self"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_thirdFragmentStudent"
+            app:destination="@id/thirdFragmentStudent" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -28,4 +31,9 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/thirdFragmentStudent"
+        android:name="com.example.coursemanager.ThirdFragmentStudent"
+        android:label="fragment_third_student"
+        tools:layout="@layout/fragment_third_student" />
 </navigation>
