@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.coursemanager.ui.login.Course;
+import com.example.coursemanager.ui.login.Schedule;
+
+import java.util.ArrayList;
+
 public class ThirdFragmentStudent extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -56,4 +61,24 @@ public class ThirdFragmentStudent extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_third_student, container, false);
     }
+
+    // Edit junk above
+    // Needs to get courses taken and courses wanted from previous fragment here, converting them to course lists
+
+    // Then:
+
+    Schedule useless = new Schedule ();
+    ArrayList<Course> TotalCourses = new ArrayList<Course>();
+    TotalCourses = useless.CreateTotalCoursesArray(CoursesTaken, CoursesWanted, TotalCourses);
+    ArrayList<Schedule> DegreeSchedule = useless.CreateSchedule(CoursesTaken, TotalCourses);
+
+    /* Last: with the schedule list use year and semester field to display courses -
+             field year + 2021 for fall, year + 2022 for winter & summer
+             e.g. 2nd year winter course means, Winter 2024
+
+             Display this using a table I guess
+
+     */
+
+
 }

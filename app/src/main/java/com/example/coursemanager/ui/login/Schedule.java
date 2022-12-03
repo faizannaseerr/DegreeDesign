@@ -1,6 +1,7 @@
 package com.example.coursemanager.ui.login;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Schedule {
     Course course;
@@ -19,6 +20,7 @@ public class Schedule {
         this.semester = semester;
     }
 
+    // Uses recursion to create a total list for all the courses needed
     public ArrayList<Course> CreateTotalCoursesArray(ArrayList<Course> CoursesTaken, ArrayList<Course> CoursesWanted, ArrayList<Course> TotalCourses) {
 
 
@@ -43,6 +45,9 @@ public class Schedule {
 			Swap maxCourseCounter with PresentSemCourses.size()
 			Remove three variations of PresentSemCourses and just use .clear() with one declaration
 			Remove all the system.out lines (was added for testing) */
+
+    /* Functions goes through total courses thrice, checking for fall winter and summer courses and if prereqs are satisfied then it is added to a Schedule List
+       -- this is repeated until all courses have been added and the degree year is also incremented */
 
     public ArrayList<Schedule> CreateSchedule(ArrayList<Course> CoursesTaken, ArrayList<Course> TotalCourses){
         ArrayList<Schedule> DegreeSchedule = new ArrayList<Schedule>();
