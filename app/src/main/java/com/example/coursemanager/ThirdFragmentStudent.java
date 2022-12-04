@@ -3,12 +3,20 @@ package com.example.coursemanager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
+import com.example.coursemanager.databinding.FragmentThirdStudentBinding;
 import com.example.coursemanager.ui.login.Course;
 import com.example.coursemanager.ui.login.Schedule;
 import com.google.firebase.database.DataSnapshot;
@@ -17,52 +25,49 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Console;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ThirdFragmentStudent extends Fragment {
+    private ListView listView;
+    private FragmentThirdStudentBinding binding;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ThirdFragmentStudent() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThirdFragmentStudent.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ThirdFragmentStudent newInstance(String param1, String param2) {
-        ThirdFragmentStudent fragment = new ThirdFragmentStudent();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
 
-        // Edit junk above & near end of fragment
-        // Needs to get courses taken and courses wanted from previous fragment here, converting them to course lists
+    }
+
+
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
+        binding = FragmentThirdStudentBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(ThirdFragmentStudent.this)
+                        .navigate(R.id.action_thirdFragmentStudent_to_FirstFragment);
+            }
+        });
+
+        ArrayList<Course> CoursesWanted = new ArrayList<Course>();
+        ArrayList<Course> CoursesTaken = new ArrayList<Course>();
 
         DatabaseReference dReferenceWanted = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
@@ -70,51 +75,49 @@ public class ThirdFragmentStudent extends Fragment {
                 .child(((MainActivityStudent) getActivity()).getUsername())
                 .child("coursesWanted");
 
-        ArrayList<Course> CoursesWanted = new ArrayList<Course>();
-
-        dReferenceWanted.addValueEventListener(new ValueEventListener(){
+        dReferenceWanted.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                        Course WantedCourse = new Course();
-                        WantedCourse.setCourseCode(snapshot.getKey());
-                        DatabaseReference WantedCourseRef = FirebaseDatabase
-                                .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                                .getReference().child("Courses").child(snapshot.getKey());
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Course WantedCourse = new Course();
+                    WantedCourse.setCourseCode(snapshot.getKey());
+                    DatabaseReference WantedCourseRef = FirebaseDatabase
+                            .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                            .getReference().child("Courses").child(snapshot.getKey());
 
-                        WantedCourseRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                                WantedCourse.setCourseName(dataSnapshot1.child("courseName").getValue(String.class));
-                                WantedCourse.setSummer(dataSnapshot1.child("summer").getValue(boolean.class));
-                                WantedCourse.setWinter(dataSnapshot1.child("winter").getValue(boolean.class));
-                                WantedCourse.setFall(dataSnapshot1.child("fall").getValue(boolean.class));
-                                DatabaseReference WantedCoursePrereqsRef = FirebaseDatabase
-                                        .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                                        .getReference().child("Courses").child(snapshot.getKey()).child("prereqs");
+                    WantedCourseRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                            WantedCourse.setCourseName(dataSnapshot1.child("courseName").getValue(String.class));
+                            WantedCourse.setSummer(dataSnapshot1.child("summer").getValue(boolean.class));
+                            WantedCourse.setWinter(dataSnapshot1.child("winter").getValue(boolean.class));
+                            WantedCourse.setFall(dataSnapshot1.child("fall").getValue(boolean.class));
+                            DatabaseReference WantedCoursePrereqsRef = FirebaseDatabase
+                                    .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                                    .getReference().child("Courses").child(snapshot.getKey()).child("prereqs");
 
-                                WantedCoursePrereqsRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
-                                        for (DataSnapshot snapshot: dataSnapshot2.getChildren()){
-                                            WantedCourse.addPrereqs(snapshot.getValue(String.class));
-                                        }
+                            WantedCoursePrereqsRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                                    for (DataSnapshot snapshot: dataSnapshot2.getChildren()){
+                                        WantedCourse.addPrereqs(snapshot.getValue(String.class));
                                     }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                                    }
-                                });
-                            }
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                        }
+                    });
 
-                        CoursesWanted.add(WantedCourse);
-                    }
+                    CoursesWanted.add(WantedCourse);
+                }
 
             }
 
@@ -124,7 +127,7 @@ public class ThirdFragmentStudent extends Fragment {
 
         });
 
-        ArrayList<Course> CoursesTaken = new ArrayList<Course>();
+
 
         DatabaseReference dReferenceTaken = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
@@ -132,7 +135,7 @@ public class ThirdFragmentStudent extends Fragment {
                 .child(((MainActivityStudent) getActivity()).getUsername())
                 .child("coursesTaken");
 
-        dReferenceTaken.addValueEventListener(new ValueEventListener() {
+        dReferenceTaken.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
@@ -141,7 +144,6 @@ public class ThirdFragmentStudent extends Fragment {
                     CoursesTaken.add(TakenCourse);
 
                     // Don't need to add more details for Courses Taken I believe, other than course codes
-                    // Can later use toast messages for debugging i gues
                 }
             }
 
@@ -153,34 +155,32 @@ public class ThirdFragmentStudent extends Fragment {
 
         // Then:
 
+        ArrayList<String> print = new ArrayList<>();
+        for (int i = 0; i < CoursesTaken.size(); i++){
+            print.add(CoursesTaken.get(i).getCourseCode());
+        }
+
+        /* Courses Taken isn't showing up on the screen ugh */
+
         Schedule useless = new Schedule ();
         ArrayList<Course> TotalCourses = new ArrayList<Course>();
+
         TotalCourses = useless.CreateTotalCoursesArray(CoursesTaken, CoursesWanted, TotalCourses);
         ArrayList<Schedule> DegreeSchedule = useless.CreateSchedule(CoursesTaken, TotalCourses);
 
         /* Last: with the schedule list use year and semester field to display courses -
-             field year + 2021 for fall, year + 2022 for winter & summer
-             e.g. 2nd year winter course means, Winter 2024
+             degree year 1 means 2022 and so on
 
              Display this using a table I guess, or list view
              (list view seems nicer & cleaner tbh)
-
-        */
-
-        // Previous button to previous fragment & change text on orange header
+         */
 
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, print);
+        binding.listview.setAdapter(adapter);
 
+        // Currently using this to test schedule algorithm & generation of Courses Wanted & Taken Arrays ^^
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_third_student, container, false);
-    }
-
-
-
-
 }
+
+// Change text on orange header

@@ -35,5 +35,9 @@
         android:id="@+id/thirdFragmentStudent"
         android:name="com.example.coursemanager.ThirdFragmentStudent"
         android:label="fragment_third_student"
-        tools:layout="@layout/fragment_third_student" />
+        tools:layout="@layout/fragment_third_student" >
+        <action
+            android:id="@+id/action_thirdFragmentStudent_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
 </navigation>

@@ -8,11 +8,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    Course course;
+    public Course course;
     int year;
     String semester;
     static boolean k;
@@ -98,8 +99,14 @@ public class Schedule {
 
                     else {
                         boolean PreReqsSatisfied = true;
+                        ArrayList<String> CoursesTakenString = new ArrayList<String>();
+                        for (int z = 0; z < CoursesTaken.size(); z++ ){
+                            CoursesTakenString.add(CoursesTaken.get(z).courseCode);
+                        }
                         for (int j = 0; j < TotalCourses.get(i).prereqs.size(); j++) {
-                            if (!CoursesTaken.contains(TotalCourses.get(i).prereqs.get(j))) {
+                            // TotalCourses.get(i).prereqs.get(j) will be a String, should be a converted to a course in all three for loops
+                            // or convert courses taken to strings - I have done the latter, need to test though
+                            if (!CoursesTakenString.contains(TotalCourses.get(i).prereqs.get(j))) {
                                 PreReqsSatisfied = false;
                                 break;
                             }
@@ -135,8 +142,12 @@ public class Schedule {
 
                     else {
                         boolean PreReqsSatisfied = true;
+                        ArrayList<String> CoursesTakenString = new ArrayList<String>();
+                        for (int z = 0; z < CoursesTaken.size(); z++ ){
+                            CoursesTakenString.add(CoursesTaken.get(z).courseCode);
+                        }
                         for (int j = 0; j < TotalCourses.get(i).prereqs.size(); j++) {
-                            if (!CoursesTaken.contains(TotalCourses.get(i).prereqs.get(j))) {
+                            if (!CoursesTakenString.contains(TotalCourses.get(i).prereqs.get(j))) {
                                 PreReqsSatisfied = false;
                                 break;
                             }
@@ -167,8 +178,12 @@ public class Schedule {
 
                     else {
                         boolean PreReqsSatisfied = true;
+                        ArrayList<String> CoursesTakenString = new ArrayList<String>();
+                        for (int z = 0; z < CoursesTaken.size(); z++ ){
+                            CoursesTakenString.add(CoursesTaken.get(z).courseCode);
+                        }
                         for (int j = 0; j < TotalCourses.get(i).prereqs.size(); j++) {
-                            if (!CoursesTaken.contains(TotalCourses.get(i).prereqs.get(j))) {
+                            if (!CoursesTakenString.contains(TotalCourses.get(i).prereqs.get(j))) {
                                 PreReqsSatisfied = false;
                                 break;
                             }
