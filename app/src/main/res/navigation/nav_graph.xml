@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/thirdFragmentStudent"
         android:name="com.example.coursemanager.ThirdFragmentStudent"
-        android:label="fragment_third_student"
+        android:label= "@string/third_fragment_label"
         tools:layout="@layout/fragment_third_student" >
         <action
             android:id="@+id/action_thirdFragmentStudent_to_FirstFragment"

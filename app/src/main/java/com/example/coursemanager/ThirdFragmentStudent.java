@@ -30,17 +30,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ThirdFragmentStudent extends Fragment {
-    private ListView listView;
     private FragmentThirdStudentBinding binding;
 
 
-
+/*
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-    }
+    } */
 
 
     @Override
@@ -153,11 +152,11 @@ public class ThirdFragmentStudent extends Fragment {
             }
         });
 
-        // Then:
+        // Display Courses Wanted:
 
         ArrayList<String> print = new ArrayList<>();
-        for (int i = 0; i < CoursesTaken.size(); i++){
-            print.add(CoursesTaken.get(i).getCourseCode());
+        for (int i = 0; i < CoursesWanted.size(); i++){
+            print.add(CoursesWanted.get(i).getCourseCode());
         }
 
         /* Courses Taken isn't showing up on the screen ugh */
@@ -183,4 +182,4 @@ public class ThirdFragmentStudent extends Fragment {
     }
 }
 
-// Change text on orange header
+// Remove back arrow on header
