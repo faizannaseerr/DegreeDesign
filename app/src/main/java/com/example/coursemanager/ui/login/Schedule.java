@@ -1,5 +1,13 @@
 package com.example.coursemanager.ui.login;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +15,7 @@ public class Schedule {
     Course course;
     int year;
     String semester;
+    static boolean k;
 
     // This constructor is used for using the whole algorithm
     public Schedule() {
@@ -32,7 +41,34 @@ public class Schedule {
                 return TotalCourses;
             } else if (!CoursesTaken.contains(CoursesWanted.get(i)) && !TotalCourses.contains(CoursesWanted.get(i))) {
                 // need line here to convert string prereqs list to course prereqs list
-                TotalCourses = CreateTotalCoursesArray(CoursesTaken, CoursesWanted.get(i).prereqs, TotalCourses);
+                ArrayList<String> wanted = CoursesWanted.get(i).prereqs;
+                ArrayList<Course> wantedCourses = new ArrayList<Course>();
+                for (String thing: wanted){
+                    k = true;
+                    DatabaseReference ref = FirebaseDatabase
+                            .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                            .getReference().child("Courses").child(thing);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            wantedCourses.add((Course) snapshot.getValue());
+                            k = false;
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    //this essentially forces the async task to be synchronous
+                    while(k){
+
+                    }
+
+                }
+
+
+                TotalCourses = CreateTotalCoursesArray(CoursesTaken, wantedCourses, TotalCourses);
                 TotalCourses.add(CoursesWanted.get(i));
             }
 
@@ -84,6 +120,10 @@ public class Schedule {
             CoursesTaken.addAll(PresentSemCourses);
             TotalCourses.removeAll(PresentSemCourses);
 
+
+            //Moving this here because 2022 fall is followed by 2023 winter, and so on
+            //This will be more accurate for how the semesters work in practice
+            DegreeYear += 1;
 
             PresentSemCourses.clear();
             for (int i = 0; i < TotalCourses.size(); i++) {
@@ -149,7 +189,6 @@ public class Schedule {
             CoursesTaken.addAll(PresentSemCourses);
             TotalCourses.removeAll(PresentSemCourses);
 
-            DegreeYear += 1;
         }
 
 
