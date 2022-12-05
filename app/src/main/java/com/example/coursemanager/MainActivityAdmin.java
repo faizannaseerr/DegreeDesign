@@ -2,6 +2,7 @@ package com.example.coursemanager;
 
 import android.os.Bundle;
 
+import com.example.coursemanager.ui.login.Course;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +17,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.coursemanager.databinding.ActivityMainAdminBinding;
+
+import java.io.Serializable;
 
 public class MainActivityAdmin extends AppCompatActivity {
 
@@ -75,6 +78,15 @@ public class MainActivityAdmin extends AppCompatActivity {
             name = bundle.getString("courseCode");
         }
         return name;
+    }
+
+    public Course getOldCourse(){
+        Course old = new Course();
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            old = (Course) bundle.getSerializable("oldCourse");
+        }
+        return old;
     }
 
 }

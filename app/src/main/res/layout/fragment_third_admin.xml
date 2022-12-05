@@ -25,11 +25,11 @@
         android:id="@+id/editing_course"
         android:layout_width="255dp"
         android:layout_height="39dp"
+        android:layout_marginTop="40dp"
         android:text="@string/edit_course"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editcourseName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -133,30 +133,27 @@
         android:id="@+id/prereq_header"
         android:layout_width="114dp"
         android:layout_height="21dp"
-        android:layout_marginTop="81dp"
         android:text="@string/prereq"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/course_prereqs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.705"
         app:layout_constraintStart_toEndOf="@+id/offeringSessions"
-        app:layout_constraintTop_toBottomOf="@+id/editcourseName"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/editcoursecode"
+        app:layout_constraintVertical_bias="0.933" />
 
     <EditText
         android:id="@+id/editcourseName"
         android:layout_width="165dp"
         android:layout_height="43dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/course_name"
         android:inputType="textEmailAddress"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/offeringSessions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.603" />
+        app:layout_constraintTop_toBottomOf="@+id/editing_course" />
 
     <ScrollView
         android:id="@+id/course_prereqs"
@@ -176,5 +173,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <EditText
+        android:id="@+id/editcoursecode"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="@string/course_code"
+        android:inputType="textEmailAddress"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/offeringSessions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editcourseName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,9 @@
 package com.example.coursemanager.ui.login;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course {
+public class Course implements Serializable {
     String courseName;
     String courseCode;
     ArrayList<String> prereqs;
@@ -40,8 +41,8 @@ public class Course {
         this.prereqs.add(prereqs);
     }
 
-    public ArrayList<String> setPrereqs(ArrayList<String> s) {
-        return s;
+    public void setPrereqs(ArrayList<String> s) {
+        prereqs = s;
     }
 
     public boolean isFall() {

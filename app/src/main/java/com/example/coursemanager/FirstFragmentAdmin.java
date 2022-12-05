@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentFirstAdminBinding;
+import com.example.coursemanager.ui.login.Course;
 import com.example.coursemanager.ui.login.LoginActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -151,6 +152,7 @@ public class FirstFragmentAdmin extends Fragment {
                                 public void onClick(View v) {
                                     Intent intent = getActivity().getIntent();
                                     intent.putExtra("courseCode", finalName);
+                                    intent.putExtra("oldCourse", snapshot.child(finalName).getValue(Course.class));
 
                                     NavHostFragment.findNavController(FirstFragmentAdmin.this)
                                             .navigate(R.id.action_FirstFragment_to_thirdFragmentAdmin);
