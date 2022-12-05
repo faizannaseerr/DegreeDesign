@@ -54,7 +54,7 @@ public class ThirdFragmentStudent extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +67,29 @@ public class ThirdFragmentStudent extends Fragment {
 
         ArrayList<Course> CoursesWanted = new ArrayList<Course>();
         ArrayList<Course> CoursesTaken = new ArrayList<Course>();
+
+        DatabaseReference dReferenceTaken = FirebaseDatabase
+                .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
+                .getReference().child("students")
+                .child(((MainActivityStudent) getActivity()).getUsername())
+                .child("coursesTaken");
+
+        dReferenceTaken.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Course TakenCourse = new Course();
+                    TakenCourse.setCourseCode(snapshot.getKey());
+                    CoursesTaken.add(TakenCourse);
+                    // Don't need to add more details for Courses Taken I believe, other than course codes
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         DatabaseReference dReferenceWanted = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
@@ -118,6 +141,39 @@ public class ThirdFragmentStudent extends Fragment {
                     CoursesWanted.add(WantedCourse);
                 }
 
+                // Keep ur code to display inside this block ***
+
+
+                ArrayList<String> print = new ArrayList<>();
+                for (int i = 0; i < CoursesWanted.size(); i++){
+                    print.add(CoursesWanted.get(i).getCourseCode());
+                }
+                Log.d("Debug",CoursesWanted.toString());
+                Log.d("Debug",CoursesTaken.toString());
+
+                /* Courses Taken isn't showing up on the screen ugh */
+
+                Schedule useless = new Schedule ();
+                ArrayList<Course> TotalCourses = new ArrayList<Course>();
+
+                TotalCourses = useless.CreateTotalCoursesArray(CoursesTaken, CoursesWanted, TotalCourses);
+                ArrayList<Schedule> DegreeSchedule = useless.CreateSchedule(CoursesTaken, TotalCourses);
+
+                /* Last: with the schedule list use year and semester field to display courses -
+                     degree year 1 means 2022 and so on
+
+                     Display this using a table I guess, or list view
+                     (list view seems nicer & cleaner tbh)
+                 */
+
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, print);
+                binding.listview.setAdapter(adapter);
+
+                // Currently using this to test schedule algorithm & generation of Courses Wanted & Taken Arrays ^^
+
+
+                //end of block***
             }
 
             @Override
@@ -126,72 +182,6 @@ public class ThirdFragmentStudent extends Fragment {
 
         });
 
-
-
-        DatabaseReference dReferenceTaken = FirebaseDatabase
-                .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                .getReference().child("students")
-                .child(((MainActivityStudent) getActivity()).getUsername())
-                .child("coursesTaken");
-
-        dReferenceTaken.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Course TakenCourse = new Course();
-                    TakenCourse.setCourseCode(snapshot.getKey());
-                    CoursesTaken.add(TakenCourse);
-
-                    // Don't need to add more details for Courses Taken I believe, other than course codes
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        // Display Courses Wanted:
-
-        ArrayList<String> print = new ArrayList<String>();
-        for (int i = 0; i < CoursesWanted.size(); i++){
-            print.add(CoursesWanted.get(i).getCourseCode());
-        }
-
-        /* Courses Wanted isn't showing up on the screen ugh */
-
-        Schedule useless = new Schedule ();
-        ArrayList<Course> TotalCourses = new ArrayList<Course>();
-
-        TotalCourses = useless.CreateTotalCoursesArray(CoursesTaken, CoursesWanted, TotalCourses);
-        ArrayList<Schedule> DegreeSchedule = useless.CreateSchedule(CoursesTaken, TotalCourses);
-
-        /* Last: with the schedule list use year and semester field to display courses -
-             degree year 1 means 2022 and so on
-
-             Display this using a table I guess, or list view
-             (list view seems nicer & cleaner tbh)
-         */
-
-        ArrayList<String> print2 = new ArrayList<String>();
-        print2.add("jdjsdsjdd");
-        print2.add("nsddsds");
-        print2.add("jdjsdsjdd");
-        print2.add("nsddsds");
-        print2.add("jdjsdsjdd");
-        print2.add("nsddsds");
-        print2.add("nsddsds");
-        print2.add("jdjsdsjdd");
-        print2.add("nsddsds");
-        print2.add("jdjsdsjdd");
-        print2.add("nsddsds");
-
-        // Created print2 to make sure listview is working as usual
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, print);
-        binding.listview.setAdapter(adapter);
-
-        // Currently using this to test schedule algorithm & generation of Courses Wanted & Taken Arrays ^^
     }
 }
 
