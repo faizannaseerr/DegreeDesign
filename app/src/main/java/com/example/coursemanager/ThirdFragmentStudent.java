@@ -68,52 +68,44 @@ public class ThirdFragmentStudent extends Fragment {
         ArrayList<Course> CoursesWanted = new ArrayList<Course>();
         ArrayList<Course> CoursesTaken = new ArrayList<Course>();
 
-        DatabaseReference dReferenceTaken = FirebaseDatabase
+        DatabaseReference dReference = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                .getReference().child("students")
-                .child(((MainActivityStudent) getActivity()).getUsername())
-                .child("coursesTaken");
-
-        dReferenceTaken.addListenerForSingleValueEvent(new ValueEventListener() {
+                .getReference();
+        dReference.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                DataSnapshot snap = dataSnapshot.child("students").
+                        child(((MainActivityStudent) getActivity()).getUsername())
+                        .child("coursesTaken");
+                for (DataSnapshot snapshot: snap.getChildren()){
                     Course TakenCourse = new Course();
                     TakenCourse.setCourseCode(snapshot.getKey());
                     CoursesTaken.add(TakenCourse);
                     // Don't need to add more details for Courses Taken I believe, other than course codes
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-        DatabaseReference dReferenceWanted = FirebaseDatabase
-                .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                .getReference();
-        dReferenceWanted.addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 DataSnapshot data = dataSnapshot.child("students")
                         .child(((MainActivityStudent) getActivity()).getUsername())
                         .child("coursesWanted");
+
                 for (DataSnapshot snapshot: data.getChildren()){
                     Course WantedCourse = new Course();
                     WantedCourse.setCourseCode(snapshot.getKey());
+
                     DataSnapshot dataSnapshot1 = dataSnapshot.child("Courses")
                             .child(snapshot.getKey());
                     WantedCourse.setCourseName(dataSnapshot1.child("courseName").getValue(String.class));
                     WantedCourse.setSummer(dataSnapshot1.child("summer").getValue(boolean.class));
                     WantedCourse.setWinter(dataSnapshot1.child("winter").getValue(boolean.class));
                     WantedCourse.setFall(dataSnapshot1.child("fall").getValue(boolean.class));
+
                     DataSnapshot dataSnapshot2 = dataSnapshot.child("Courses")
                             .child(snapshot.getKey()).child("prereqs");
                     for (DataSnapshot snapshot2: dataSnapshot2.getChildren()){
                         WantedCourse.addPrereqs(snapshot2.getValue(String.class));
                     }
+
                     CoursesWanted.add(WantedCourse);
                 }
 
