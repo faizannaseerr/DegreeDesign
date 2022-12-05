@@ -1,29 +1,27 @@
 package com.example.coursemanager.ui.login;
 
-import java.util.ArrayList;
-
 public class User {
-    public String email;
+    public String username;
     public String password;
 
     public User(){
     }
 
-    public User(String email, String password){
-        this.email = email;
+    public User(String username, String password){
+        this.username = username;
         this.password = password;
     }
 
-    public void setEmail(String email){
-        this.email = email;
+    public void setUsername(String username){
+        this.username = username;
     }
 
     public void setPassword(String password){
         this.password = password;
     }
 
-    public String getEmail(){
-        return this.email;
+    public String getUsername(){
+        return this.username;
     }
 
     public String getPassword(){
@@ -40,7 +38,7 @@ public class User {
         }
 
         User user = (User) obj;
-        if(email == user.email && password == user.password){
+        if(username == user.username && password == user.password){
             return true;
         }
         return false;
@@ -48,6 +46,6 @@ public class User {
 
     @Override
     public String toString(){
-        return email;
+        return username;
     }
 }

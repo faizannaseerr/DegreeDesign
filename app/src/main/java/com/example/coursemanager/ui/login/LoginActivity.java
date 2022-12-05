@@ -3,10 +3,13 @@ package com.example.coursemanager.ui.login;
 import android.app.Activity;
 
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.coursemanager.MainActivityAdmin;
 import com.example.coursemanager.MainActivityStudent;
+import com.example.coursemanager.R;
 import com.example.coursemanager.databinding.ActivityLoginBinding;
 
 // ***
@@ -37,7 +41,9 @@ import com.example.coursemanager.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginPresenter loginPresenter;
+    private LoginModel loginModel = new LoginModel();
     private ActivityLoginBinding binding;
+    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         loginPresenter = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginPresenter.class);
         loginPresenter.setLoginActivity(LoginActivity.this);
+        loginPresenter.setLoginModel(loginModel);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -56,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
-        loginPresenter.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        LoginActivity.this.loginFormState.observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -87,24 +94,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginPresenter.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-            }
-        });
-
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -121,15 +110,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 // Check if the user information entered is a student login in the database
-                loginPresenter.checkStudentInDB(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-
-                // Check if the user information entered is an admin login in the database
-                loginPresenter.checkAdminInDB(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                loginPresenter.checkInDB(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginPresenter.loginDataChanged(usernameEditText.getText().toString(),
+                LoginActivity.this.loginDataChanged(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         };
@@ -140,8 +126,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginPresenter.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
                 }
                 return false;
             }
@@ -150,9 +134,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginPresenter.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
 
                 //upon press login Presenter will decide what the login button does
                 loginPresenter.loginButtonAction(usernameEditText.getText().toString());
@@ -162,13 +143,18 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginPresenter.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-
                 loginPresenter.registerButtonAction(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
+    }
+    public void loginDataChanged(String username, String password) {
+        if (!loginPresenter.isUserNameValid(username)) {
+            LoginActivity.this.loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
+        } else if (!loginPresenter.isPasswordValid(password)) {
+            LoginActivity.this.loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
+        } else {
+            LoginActivity.this.loginFormState.setValue(new LoginFormState(true));
+        }
     }
 
     public void displayToastMsg(String str) {
@@ -187,11 +173,4 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(passer);
     }
 
-
-    private void updateUiWithUser(LoggedInUserView model) {
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-    }
 }

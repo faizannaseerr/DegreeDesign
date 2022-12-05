@@ -1,5 +1,10 @@
 package com.example.coursemanager.ui.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,53 +26,39 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginPresenter extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
-    private final int[] loginAction = new int[1];
-    private final int[] registerAction = new int[1];
-    private LoginActivity loginActivity;
 
-    LoginPresenter(LoginRepository loginRepository) {
+    private LoginModel loginModel;
+    private LoginActivity loginActivity;
+    private int[] action = new int[2];
+
+    public LoginModel getLoginModel() {
+        return loginModel;
+    }
+
+    public LoginPresenter(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
 
-    LiveData<LoginFormState> getLoginFormState() {
-        return loginFormState;
+    public LoginPresenter(LoginModel model, LoginActivity view) {
+        loginModel = model;
+        loginActivity = view;
     }
 
-    LiveData<LoginResult> getLoginResult() {
-        return loginResult;
+    public void setLoginModel(LoginModel loginModel) {
+        this.loginModel = loginModel;
+    }
+
+    public LoginActivity getLoginActivity() {
+        return loginActivity;
     }
 
     public void setLoginActivity(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
     }
 
-    public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
-    }
-
-    public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {
-            loginFormState.setValue(new LoginFormState(true));
-        }
-    }
-
-    // A placeholder username validation check
-    private boolean isUserNameValid(String username) {
+    // simple username validation check
+    public boolean isUserNameValid(String username) {
         if (username == null) {
             return false;
         } else {
@@ -75,128 +66,47 @@ public class LoginPresenter extends ViewModel {
         }
     }
 
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
+    // simple password validation check
+    public boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
 
-    // Check username in database for students
-    public void checkStudentInDB(String username, String pass) {
-        LoginModel loginModel = new LoginModel(username, pass);
-
-        loginModel.ref.child("students").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (username.compareTo("") == 0) {
-                    //does nothing but prevents app from crashing
-                }
-                //if the email is correct, continue with the checks, otherwise, display msg
-                else if (snapshot.hasChild(username)) {
-                    loginModel.ref.child("students").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                            DataSnapshot ds = task.getResult();
-                            User login = ds.getValue(User.class);
-                            if(loginModel.checkPassword(login.getPassword())){
-                                // Checks if the password entered matches the password of the given email.
-                                // If it does, bring them to the student landing page
-                                loginAction[0] = 3;
-                                registerAction[0] = 1;
-
-                            }
-                            else{
-                                //wrong password msg
-                                loginAction[0] = 2;
-                                registerAction[0] = 1;
-
-                            }
-                        }
-                    });
-                }
-                else {
-                    loginAction[0] = 1;
-                    registerAction[0] = 2;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
+    // Check username in database for students or admins
+    public void checkInDB(String username, String pass) {
+        loginModel.setUser(new User(username, pass));
+        //loginModel checks if the username and password are correct and updates the variable that tell presenter what to do
+        loginModel.checkStudentInDB();
+        loginModel.checkAdminInDB();
     }
 
-    // Check username in database for admins
-    public void checkAdminInDB(String username, String pass) {
-        LoginModel loginModel = new LoginModel(username, pass);
-
-        loginModel.ref.child("admins").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (username.compareTo("") == 0) {
-                    //does nothing but prevents app from crashing
-                }
-                //if the email is correct, continue with the checks, otherwise, display msg
-                else if (snapshot.hasChild(username)) {
-                    loginModel.ref.child("admins").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                            DataSnapshot ds = task.getResult();
-                            User login = ds.getValue(User.class);
-                            if(loginModel.checkPassword(login.getPassword())){
-
-                                // Checks if the password entered matches the password of the given email.
-                                // If it does, bring them to the admin landing page
-                                loginAction[0] = 4;
-                            }
-                            else {
-                                //wrong password msg
-                                loginAction[0] = 2;
-                            }
-                        }
-                    });
-                }
-                else {
-                    loginAction[0] = 1;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-    }
 
     public void loginButtonAction(String username) {
-        if (loginAction[0] == 1) {
+        if (loginModel.getLoginAction() == 1) {
             loginActivity.displayToastMsg("This username is not associated \nwith an account");
         }
-        else if (loginAction[0] == 2) {
+        else if (loginModel.getLoginAction() == 2) {
             loginActivity.displayToastMsg("The password entered is incorrect");
         }
-        else if (loginAction[0] == 3) {
+        else if (loginModel.getLoginAction() == 3) {
             loginActivity.completeActivity(username, true);
         }
-        else if (loginAction[0] ==4 ) {
+        else if (loginModel.getLoginAction() ==4 ) {
             loginActivity.completeActivity(username, false);
         }
     }
 
     public void registerButtonAction(String username, String pass) {
         //email error
-        if (registerAction[0] == 1) {
+        if (loginModel.getRegisterAction() == 1) {
             loginActivity.displayToastMsg("This username is already \nassociated with an account");
         }
         //new acc
-        else if (registerAction[0] == 2) {
+        else if (loginModel.getRegisterAction() == 2) {
             if (username.equals("admin1")) {
                 loginActivity.displayToastMsg("You cannot register an \naccount with that name");
             }
             else {
-                LoginModel loginModel = new LoginModel(username, pass);
+                loginModel.setUser(new User(username, pass));
                 loginModel.createNewAccount();
 
                 //fix for bugs where new student accounts don't display name and crash when adding courses
