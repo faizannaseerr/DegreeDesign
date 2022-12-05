@@ -192,11 +192,16 @@ public class LoginPresenter extends ViewModel {
         }
         //new acc
         else if (registerAction[0] == 2) {
-            LoginModel loginModel = new LoginModel(username, pass);
-            loginModel.createNewAccount();
+            if (username.equals("admin1")) {
+                loginActivity.displayToastMsg("You cannot register an \naccount with that name");
+            }
+            else {
+                LoginModel loginModel = new LoginModel(username, pass);
+                loginModel.createNewAccount();
 
-            //fix for bugs where new student accounts don't display name and crash when adding courses
-            loginActivity.completeActivity(username, true);
+                //fix for bugs where new student accounts don't display name and crash when adding courses
+                loginActivity.completeActivity(username, true);
+            }
         }
     }
 

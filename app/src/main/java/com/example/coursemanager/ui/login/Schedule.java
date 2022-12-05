@@ -52,7 +52,7 @@ public class Schedule {
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            wantedCourses.add((Course) snapshot.getValue());
+                            wantedCourses.add(snapshot.getValue(Course.class));
                             k = false;
                         }
 
@@ -85,9 +85,10 @@ public class Schedule {
         ArrayList<Schedule> DegreeSchedule = new ArrayList<Schedule>();
         int DegreeYear = 1;
         ArrayList<Course> PresentSemCourses = new ArrayList<Course>();
-
+        // Can create CoursesTakenString outside for loop to reduce efficiency tbf
 
         while (!TotalCourses.isEmpty()) {
+
 
             PresentSemCourses.clear();
             for (int i = 0; i < TotalCourses.size(); i++) {
