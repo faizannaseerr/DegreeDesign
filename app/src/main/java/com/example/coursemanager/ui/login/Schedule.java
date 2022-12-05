@@ -52,7 +52,7 @@ public class Schedule {
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            wantedCourses.add((Course) snapshot.getValue());
+                            wantedCourses.add(snapshot.getValue(Course.class));
                             k = false;
                         }
 

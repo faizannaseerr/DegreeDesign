@@ -93,51 +93,27 @@ public class ThirdFragmentStudent extends Fragment {
 
         DatabaseReference dReferenceWanted = FirebaseDatabase
                 .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                .getReference().child("students")
-                .child(((MainActivityStudent) getActivity()).getUsername())
-                .child("coursesWanted");
-
+                .getReference();
         dReferenceWanted.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                DataSnapshot data = dataSnapshot.child("students")
+                        .child(((MainActivityStudent) getActivity()).getUsername())
+                        .child("coursesWanted");
+                for (DataSnapshot snapshot: data.getChildren()){
                     Course WantedCourse = new Course();
                     WantedCourse.setCourseCode(snapshot.getKey());
-                    DatabaseReference WantedCourseRef = FirebaseDatabase
-                            .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                            .getReference().child("Courses").child(snapshot.getKey());
-
-                    WantedCourseRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                            WantedCourse.setCourseName(dataSnapshot1.child("courseName").getValue(String.class));
-                            WantedCourse.setSummer(dataSnapshot1.child("summer").getValue(boolean.class));
-                            WantedCourse.setWinter(dataSnapshot1.child("winter").getValue(boolean.class));
-                            WantedCourse.setFall(dataSnapshot1.child("fall").getValue(boolean.class));
-                            DatabaseReference WantedCoursePrereqsRef = FirebaseDatabase
-                                    .getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/")
-                                    .getReference().child("Courses").child(snapshot.getKey()).child("prereqs");
-
-                            WantedCoursePrereqsRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
-                                    for (DataSnapshot snapshot: dataSnapshot2.getChildren()){
-                                        WantedCourse.addPrereqs(snapshot.getValue(String.class));
-                                    }
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
+                    DataSnapshot dataSnapshot1 = dataSnapshot.child("Courses")
+                            .child(snapshot.getKey());
+                    WantedCourse.setCourseName(dataSnapshot1.child("courseName").getValue(String.class));
+                    WantedCourse.setSummer(dataSnapshot1.child("summer").getValue(boolean.class));
+                    WantedCourse.setWinter(dataSnapshot1.child("winter").getValue(boolean.class));
+                    WantedCourse.setFall(dataSnapshot1.child("fall").getValue(boolean.class));
+                    DataSnapshot dataSnapshot2 = dataSnapshot.child("Courses")
+                            .child(snapshot.getKey()).child("prereqs");
+                    for (DataSnapshot snapshot2: dataSnapshot2.getChildren()){
+                        WantedCourse.addPrereqs(snapshot2.getValue(String.class));
+                    }
                     CoursesWanted.add(WantedCourse);
                 }
 
