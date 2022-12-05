@@ -54,7 +54,7 @@ public class ThirdFragmentStudent extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
@@ -154,12 +154,12 @@ public class ThirdFragmentStudent extends Fragment {
 
         // Display Courses Wanted:
 
-        ArrayList<String> print = new ArrayList<>();
+        ArrayList<String> print = new ArrayList<String>();
         for (int i = 0; i < CoursesWanted.size(); i++){
             print.add(CoursesWanted.get(i).getCourseCode());
         }
 
-        /* Courses Taken isn't showing up on the screen ugh */
+        /* Courses Wanted isn't showing up on the screen ugh */
 
         Schedule useless = new Schedule ();
         ArrayList<Course> TotalCourses = new ArrayList<Course>();
@@ -174,7 +174,20 @@ public class ThirdFragmentStudent extends Fragment {
              (list view seems nicer & cleaner tbh)
          */
 
+        ArrayList<String> print2 = new ArrayList<String>();
+        print2.add("jdjsdsjdd");
+        print2.add("nsddsds");
+        print2.add("jdjsdsjdd");
+        print2.add("nsddsds");
+        print2.add("jdjsdsjdd");
+        print2.add("nsddsds");
+        print2.add("nsddsds");
+        print2.add("jdjsdsjdd");
+        print2.add("nsddsds");
+        print2.add("jdjsdsjdd");
+        print2.add("nsddsds");
 
+        // Created print2 to make sure listview is working as usual
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, print);
         binding.listview.setAdapter(adapter);
 
