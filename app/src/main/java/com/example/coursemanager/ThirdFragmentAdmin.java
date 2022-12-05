@@ -41,6 +41,7 @@ public class ThirdFragmentAdmin extends Fragment {
     private FragmentThirdAdminBinding binding;
     static Course course = new Course();
     static int i;
+    static int exists;
     static ArrayList<String> prereqList = new ArrayList<>();
     static String req;
     static Course edit_prereq_course = new Course();
@@ -103,7 +104,7 @@ public class ThirdFragmentAdmin extends Fragment {
                     CourseName.setText("");
                 }
 
-                CourseCode.setText(editCourseCode);
+                CourseCode.setText(snapshot.child("courseCode").getValue().toString());
 
                 CheckBox editfallbox = getView().findViewById(R.id.editfall);
                 editfallbox.setChecked(snapshot.child("fall").getValue().toString().compareTo("true") == 0);
@@ -143,6 +144,7 @@ public class ThirdFragmentAdmin extends Fragment {
                                         edit_prereq_course.addPrereqs(s);
 
                                         course.setPrereqs(edit_prereq_course.getPrereqs());
+                                        course.setCourseCode(edit_prereq_course.getCourseCode());
 
                                         courseRef.child(editCourseCode).setValue(course);
 
@@ -279,30 +281,91 @@ public class ThirdFragmentAdmin extends Fragment {
                         }
                         else {
                             // If you changed the course code we need to delete the old node and make a new one
-                            if (snapshot.child("courseCode").getValue().toString().compareTo(CourseCode.getText().toString()) != 0){
-                                course.setPrereqs(edit_prereq_course.getPrereqs());
+                            if (old_course.getCourseCode().compareTo(course.getCourseCode()) != 0){
+                                // Must check the user isn't trying to change the course code to one that already exists
+                                courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for(DataSnapshot snap: snapshot.getChildren()){
+                                            // If we find a course that already exists with then block it
+                                            if(snap.getKey().compareTo(course.getCourseCode()) == 0){
+                                                exists = 1;
+                                            }
+                                        }
+                                        // Block it
+                                        if (exists == 1){
+                                            String warningMsg = "A course with this code already";
+                                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                                            exists = 0;
+                                        }
+                                        // We didn't find a course with the new course code so we can go ahead and change it
+                                        else{
+                                            course.setPrereqs(edit_prereq_course.getPrereqs());
 
-                                courseRef.child(editCourseCode).removeValue();
+                                            courseRef.child(editCourseCode).removeValue();
 
-                                courseRef.child(course.getCourseCode()).setValue(course);
+                                            courseRef.child(course.getCourseCode()).setValue(course);
 
-                                String warningMsg = "Code edited";
-                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+                                            // Changing the course code requires us to switch to the new course code in all prereqs of all other courses
+                                            courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    String finalName = old_course.getCourseCode();
+                                                    for(DataSnapshot ds: snapshot.getChildren()){
+                                                        if(ds.child("courseCode").getValue().toString().compareTo(finalName) != 0 && ds.child("prereqs").exists()){
+                                                            ArrayList<String> deletion = (ArrayList) ds.child("prereqs").getValue();
+
+                                                            int isFound = 0;
+                                                            for(String item: deletion){
+                                                                if(item.compareTo(finalName)==0){
+                                                                    isFound = 1;
+                                                                }
+                                                            }
+                                                            if(isFound == 1){
+                                                                deletion.remove(finalName);
+                                                                deletion.add(course.getCourseCode());
+                                                            }
+
+                                                            courseRef.child(ds.child("courseCode").getValue().toString()).child("prereqs").setValue(deletion);
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+
+                                            String warningMsg = "Course successfully edited";
+                                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+
+                                            NavHostFragment.findNavController(ThirdFragmentAdmin.this)
+                                                    .navigate(R.id.action_thirdFragmentAdmin_to_FirstFragment);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
 
                             }
+                            // If we didn't change the course code just update everything else
                             else{
                                 courseRef.child(editCourseCode).child("courseName").setValue(course.getCourseName());
                                 courseRef.child(editCourseCode).child("fall").setValue(course.isFall());
                                 courseRef.child(editCourseCode).child("winter").setValue(course.isWinter());
                                 courseRef.child(editCourseCode).child("summer").setValue(course.isSummer());
 
+                                String warningMsg = "Course successfully edited";
+                                Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
+
+                                NavHostFragment.findNavController(ThirdFragmentAdmin.this)
+                                        .navigate(R.id.action_thirdFragmentAdmin_to_FirstFragment);
                             }
 
-                            String warningMsg = "Course successfully edited";
-                            Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
-
-                            NavHostFragment.findNavController(ThirdFragmentAdmin.this)
-                                    .navigate(R.id.action_thirdFragmentAdmin_to_FirstFragment);
                         }
 
                     }
