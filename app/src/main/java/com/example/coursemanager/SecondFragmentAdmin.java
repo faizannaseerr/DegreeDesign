@@ -161,7 +161,7 @@ public class SecondFragmentAdmin extends Fragment {
                             Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                         }
                         else{
-                            String warningMsg = "This course does not yet exist.";
+                            String warningMsg = "This course does not yet exist";
                             Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
                         }
                     }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -193,6 +195,32 @@ public class FirstFragmentAdmin extends Fragment {
                                                     courseRef.child(ds.child("courseCode").getValue().toString()).child("prereqs").setValue(deletion);
                                                 }
                                             }
+
+                                            //remove course from any student account as well
+                                            DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
+
+                                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                    for (DataSnapshot child : snapshot.child("students").getChildren()) {
+                                                        if (child.child("coursesTaken").hasChild(finalName)) {
+                                                            String msg2 = ref.child("students").child(child.getKey()).child("coursesTaken").child(finalName).toString();
+                                                            Log.d("Debug", msg2);
+
+                                                            ref.child("students").child(child.getKey()).child("coursesTaken").child(finalName).removeValue();
+                                                        }
+                                                        if (child.child("coursesWanted").hasChild(finalName)) {
+                                                            ref.child("students").child(child.getKey()).child("coursesWanted").child(finalName).removeValue();
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                }
+                                            });
+
                                             courseRef.child(finalName).removeValue();
 
                                             NavHostFragment.findNavController(FirstFragmentAdmin.this)
