@@ -337,6 +337,29 @@ public class ThirdFragmentAdmin extends Fragment {
                                                 }
                                             });
 
+                                            DatabaseReference ref = FirebaseDatabase.getInstance("https://course-manager-b07-default-rtdb.firebaseio.com/").getReference();
+
+                                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    String finalName = old_course.getCourseCode();
+                                                    for (DataSnapshot child : snapshot.child("students").getChildren()) {
+                                                        if (child.child("coursesTaken").hasChild(finalName)) {
+                                                            ref.child("students").child(child.getKey()).child("coursesTaken").child(finalName).removeValue();
+                                                            ref.child("students").child(child.getKey()).child("coursesTaken").child(course.getCourseCode()).setValue("true");
+                                                        }
+                                                        if (child.child("coursesWanted").hasChild(finalName)) {
+                                                            ref.child("students").child(child.getKey()).child("coursesWanted").child(finalName).removeValue();
+                                                            ref.child("students").child(child.getKey()).child("coursesTaken").child(course.getCourseCode()).setValue("true");
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                }
+                                            });
+
                                             String warningMsg = "Course successfully edited";
                                             Toast.makeText(getActivity(), warningMsg, Toast.LENGTH_LONG).show();
 

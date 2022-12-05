@@ -207,9 +207,6 @@ public class FirstFragmentAdmin extends Fragment {
 
                                                     for (DataSnapshot child : snapshot.child("students").getChildren()) {
                                                         if (child.child("coursesTaken").hasChild(finalName)) {
-                                                            String msg2 = ref.child("students").child(child.getKey()).child("coursesTaken").child(finalName).toString();
-                                                            Log.d("Debug", msg2);
-
                                                             ref.child("students").child(child.getKey()).child("coursesTaken").child(finalName).removeValue();
                                                         }
                                                         if (child.child("coursesWanted").hasChild(finalName)) {
