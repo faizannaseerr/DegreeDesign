@@ -1,6 +1,6 @@
 package com.example.coursemanager;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
