@@ -176,14 +176,15 @@ public class ThirdFragmentStudent extends Fragment {
 
                     //adding row to table
                     int k = 0;
+                    int l = 0;
                     TableRow row = new TableRow(getActivity());
                     TableRow.LayoutParams params =
                             new TableRow.LayoutParams(TableRow
                                     .LayoutParams.WRAP_CONTENT);
                     row.setLayoutParams(params);
-                    row.setId(1000 + (i * 3 + j) * 1000);
+                    row.setId(1000 + (i * 9 + 3 * j + l));
                     TextView semester = new TextView(getActivity());
-                    semester.setId(1001 + (i * 3 + j) * 1000);
+                    semester.setId(2000 + (i * 9 + 3 * j + l));
                     semester.setText("");
                     int year = i + 2022;
                     if (j == 0){
@@ -198,6 +199,27 @@ public class ThirdFragmentStudent extends Fragment {
                         semester.setText(year + " Summer: ");
                     }
                     row.addView(semester);
+                    binding.table.addView(row,i * 9 + 3 * j + l);
+                    l++;
+
+//                    TableRow spaceRow = new TableRow(getActivity());
+//                    TableRow.LayoutParams spaceParams =
+//                            new TableRow.LayoutParams(TableRow
+//                                    .LayoutParams.WRAP_CONTENT);
+//                    spaceRow.setLayoutParams(spaceParams);
+//                    spaceRow.setId(3000 + (i * 9 + 3 * j + l));
+//                    TextView space = new TextView(getActivity());
+//                    space.setText("   ");
+//                    spaceRow.addView(space);
+//                    binding.table.addView(spaceRow, i * 9 + 5 * j + l);
+//                    l++;
+
+                    TableRow row2 = new TableRow(getActivity());
+                    TableRow.LayoutParams params2 =
+                            new TableRow.LayoutParams(TableRow
+                                    .LayoutParams.WRAP_CONTENT);
+                    row2.setLayoutParams(params2);
+                    row2.setId(4000 + (i * 9 + 3 * j + l));
                     TextView courseList = new TextView(getActivity());
                     String longName = "";
                     while (!presentSemester.isEmpty()){
@@ -220,12 +242,25 @@ public class ThirdFragmentStudent extends Fragment {
                         morethanfive = true;
                     }
                     courseList.setText(longName);
-                    courseList.setId(1002 + (i * 3 + j) * 1000);
-                    row.addView(courseList);
-                    binding.table.addView(row, i * 3 + j);
+                    courseList.setId(5000 + (i * 9 + 3 * j + l));
+                    row2.addView(courseList);
+                    binding.table.addView(row2, i * 9 + 3 * j + l);
+                    l++;
+
+                    TableRow spaceRow2 = new TableRow(getActivity());
+                    TableRow.LayoutParams spaceParams2 =
+                            new TableRow.LayoutParams(TableRow
+                                    .LayoutParams.WRAP_CONTENT);
+                    spaceRow2.setLayoutParams(spaceParams2);
+                    spaceRow2.setId(3000 + (i * 9 + 3 * j + l));
+                    TextView space2 = new TextView(getActivity());
+                    space2.setText("   ");
+                    spaceRow2.addView(space2);
+                    binding.table.addView(spaceRow2, i * 9 + 3 * j + l);
+
                     j ++;
                     if (j == 3){
-                        i ++;
+                        i++;
                         j = 0;
                     }
                 }
