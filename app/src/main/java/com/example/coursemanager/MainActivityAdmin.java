@@ -3,13 +3,9 @@ package com.example.coursemanager;
 import android.os.Bundle;
 
 import com.example.coursemanager.ui.login.Course;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-import android.widget.CheckBox;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,8 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.coursemanager.databinding.ActivityMainAdminBinding;
-
-import java.io.Serializable;
 
 public class MainActivityAdmin extends AppCompatActivity {
 

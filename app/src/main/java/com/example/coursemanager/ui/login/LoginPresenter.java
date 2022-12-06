@@ -1,24 +1,7 @@
 package com.example.coursemanager.ui.login;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.coursemanager.data.LoginRepository;
-import com.example.coursemanager.data.Result;
-import com.example.coursemanager.data.model.LoggedInUser;
-import com.example.coursemanager.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 // ***
 // *** This is the Presenter component of the login module

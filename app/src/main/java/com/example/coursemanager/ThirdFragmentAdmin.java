@@ -1,6 +1,5 @@
 package com.example.coursemanager;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,8 +23,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentThirdAdminBinding;
 import com.example.coursemanager.ui.login.Course;
-import com.example.coursemanager.ui.login.LoginActivity;
-import com.example.coursemanager.ui.login.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,9 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-
-
 
 public class ThirdFragmentAdmin extends Fragment {
     private FragmentThirdAdminBinding binding;

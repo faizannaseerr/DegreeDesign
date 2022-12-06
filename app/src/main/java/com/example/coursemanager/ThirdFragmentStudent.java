@@ -1,48 +1,31 @@
 package com.example.coursemanager;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.coursemanager.databinding.FragmentFirstStudentBinding;
 import com.example.coursemanager.databinding.FragmentThirdStudentBinding;
 import com.example.coursemanager.ui.login.Course;
-import com.example.coursemanager.ui.login.Schedule;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Console;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ThirdFragmentStudent extends Fragment {
     private FragmentThirdStudentBinding binding;
-
-
-/*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    } */
-
 
     @Override
     public View onCreateView(
@@ -109,8 +92,6 @@ public class ThirdFragmentStudent extends Fragment {
 
                     CoursesWanted.add(WantedCourse);
                 }
-
-                // Keep ur code to display inside this block ***
 
                 // creating list of things to schedule
                 while (!CoursesWanted.isEmpty()) {
@@ -202,18 +183,6 @@ public class ThirdFragmentStudent extends Fragment {
                     binding.table.addView(row,i * 9 + 3 * j + l);
                     l++;
 
-//                    TableRow spaceRow = new TableRow(getActivity());
-//                    TableRow.LayoutParams spaceParams =
-//                            new TableRow.LayoutParams(TableRow
-//                                    .LayoutParams.WRAP_CONTENT);
-//                    spaceRow.setLayoutParams(spaceParams);
-//                    spaceRow.setId(3000 + (i * 9 + 3 * j + l));
-//                    TextView space = new TextView(getActivity());
-//                    space.setText("   ");
-//                    spaceRow.addView(space);
-//                    binding.table.addView(spaceRow, i * 9 + 5 * j + l);
-//                    l++;
-
                     TableRow row2 = new TableRow(getActivity());
                     TableRow.LayoutParams params2 =
                             new TableRow.LayoutParams(TableRow
@@ -238,7 +207,7 @@ public class ThirdFragmentStudent extends Fragment {
                         presentSemester.remove(0);
                         k ++;
                     }
-                    if (k > 4){
+                    if (k > 5){
                         morethanfive = true;
                     }
                     courseList.setText(longName);
@@ -269,47 +238,17 @@ public class ThirdFragmentStudent extends Fragment {
                     binding.textView.setText("Please consult with your program coordinator");
                     binding.textView2.setText("before taking more than 5 courses in a semester");
                 }
-
-
-                //ArrayList<String> print = new ArrayList<>();
-                //for (int i = 0; i < CoursesWanted.size(); i++){
-                    //print.add(CoursesWanted.get(i).getCourseCode());
-                //}
-                //Log.d("Debug",CoursesWanted.toString());
-                //Log.d("Debug",CoursesTaken.toString());
-
-                /* Courses Taken isn't showing up on the screen ugh */
-
-                //Schedule useless = new Schedule ();
-                //ArrayList<Course> TotalCourses = new ArrayList<Course>();
-
-                //TotalCourses = useless.CreateTotalCoursesArray(CoursesTaken, CoursesWanted, TotalCourses);
-                //ArrayList<Schedule> DegreeSchedule = useless.CreateSchedule(CoursesTaken, TotalCourses);
-
-                /* Last: with the schedule list use year and semester field to display courses -
-                     degree year 1 means 2022 and so on
-
-                     Display this using a table I guess, or list view
-                     (list view seems nicer & cleaner tbh)
-                 */
-
-
-                //ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, print);
-                //binding.listview.setAdapter(adapter);
-
-                // Currently using this to test schedule algorithm & generation of Courses Wanted & Taken Arrays ^^
-
-
-                //end of block***
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
-
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }
-
-// Remove back arrow on header

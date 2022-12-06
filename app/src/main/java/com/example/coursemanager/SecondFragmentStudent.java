@@ -1,6 +1,5 @@
 package com.example.coursemanager;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.coursemanager.databinding.FragmentSecondStudentBinding;
-import com.example.coursemanager.ui.login.LoginActivity;
-import com.example.coursemanager.ui.login.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
