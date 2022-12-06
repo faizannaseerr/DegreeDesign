@@ -1,5 +1,6 @@
 package com.example.coursemanager;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -179,6 +180,7 @@ public class ThirdFragmentStudent extends Fragment {
                         year ++;
                         semester.setText(year + " Summer: ");
                     }
+                    semester.setTypeface(semester.getTypeface(), Typeface.BOLD);
                     row.addView(semester);
                     binding.table.addView(row,i * 9 + 3 * j + l);
                     l++;
