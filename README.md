@@ -1,4 +1,4 @@
-Timeline Generator 📅🎓
+#Timeline Generator 📅🎓
 
 CSCB07 (Software Design) Final Group Project (4)
 
