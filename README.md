@@ -11,6 +11,6 @@ Technologies: Android Studio, Java, Git, Firebase, Jira
 
 1. Students can log in and register, and then add courses they have taken as well as courses they want to take in the future. All of this can be readily edited and the input is sanitized.
 2. Admins can log in and register, as well as add and delete courses, whilst also editing course information and prerequisites.
-3. A degree timeline is generated for students based on their desirable courses and their subsequent prerequisities. (Most Individual Input Here)
+3. A degree timeline is generated for students based on their desirable courses and their subsequent prerequisities. (*Most Individual Input Here*)
 
 
