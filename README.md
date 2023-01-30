@@ -17,8 +17,6 @@ Technologies: Android Studio, Java, Git, Firebase, Jira
 
 The app can be run through andriod studio and an android phone emulator, or through connecting an android phone via cable.
 
-## App Snippets
-
 
 
 
