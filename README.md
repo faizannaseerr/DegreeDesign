@@ -15,7 +15,7 @@ Technologies: Android Studio, Java, Git, Firebase, Jira
 
 ## Running The App
 
-The app can be run through andriod studio and an android phone emulator, or through connecting an android phone via cable.
+The app can be run by pulling the repository to andriod studio and then using an android phone emulator, or through connecting an android phone via cable.
 
 
 
