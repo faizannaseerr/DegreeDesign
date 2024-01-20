@@ -1,4 +1,4 @@
-# Timeline Generator App 📅🎓
+# Degree Design 📅🎓
 
 CSCB07 (Software Design) Final Group Project (4)
 
