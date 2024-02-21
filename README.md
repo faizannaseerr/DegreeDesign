@@ -17,6 +17,8 @@ Technologies: Android Studio, Java, Git, Firebase, Jira
 
 The app can be run by pulling the repository to andriod studio, and then using an android phone emulator or through connecting an android phone via cable.
 
+## Application Snapshots
 
-
-
+![4](https://github.com/faizannaseerr/DegreeDesign/assets/111910355/4fcb23bd-33ef-4fd5-b6b6-a676430f4049)
+![5](https://github.com/faizannaseerr/DegreeDesign/assets/111910355/0035c643-a91d-4a83-972b-625e1cac9b30)
+![1](https://github.com/faizannaseerr/DegreeDesign/assets/111910355/de63d318-d4fa-4c72-866a-ad6ff45f96b9)
